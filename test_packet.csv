@@ -1,0 +1,14 @@
+Section,Name,Offset,Type,Units,Details
+Key Motor,Package ID,0,uchar,-,ID = 1
+,M0 Alive,1,uchar,boolean,0x01 Alive
+,M0 Set Current,2,float,%,
+,M0 Set Velocity,6,float,RPM,
+,M0 Bus Current,10,float,A,
+,M0 Bus Voltage,14,float,V,
+,M0 Vehicle Velocity,18,float,m/s,
+,M1 Alive,22,uchar,boolean,0x01 Alive
+,M1 Set Current,23,float,%,
+,M1 Set Velocity,27,float,RPM,
+,M1 Bus Current,31,float,A,
+,M1 Bus Voltage,35,float,V,
+,M1 Vehicle Velocity,39,float,m/s,
