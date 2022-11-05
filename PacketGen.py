@@ -1,6 +1,6 @@
 import argparse
 
-from Generators import TypescriptGenerator
+from Generator.CGen import CGen
 from PacketParser import PacketParser
 
 if __name__ == "__main__":
@@ -12,5 +12,4 @@ if __name__ == "__main__":
     parser = PacketParser(args.filename)
     parser.parse()
     print(parser)
-    ts_gen = TypescriptGenerator(parser.get_pakcet_sections())
-    ts_gen.generate("telemetry-data.interface.ts")
+    CGen(parser.get_packets()).generate('output')

@@ -1,31 +1,32 @@
-Section,Name,Offset,Type,Units,Details
-Key Motor,Package ID,0,uchar,-,ID = 1
-,M0 Alive,1,uchar,boolean,0x01 Alive
-,M0 Set Current,2,float,%,
-,M0 Set Velocity,6,float,RPM,
-,M0 Bus Current,10,float,A,
-,M0 Bus Voltage,14,float,V,
-,M0 Vehicle Velocity,18,float,m/s,
-,M1 Alive,22,uchar,boolean,0x01 Alive
-,M1 Set Current,23,float,%,
-,M1 Set Velocity,27,float,RPM,
-,M1 Bus Current,31,float,A,
-,M1 Bus Voltage,35,float,V,
-,M1 Vehicle Velocity,39,float,m/s,
-Motor 0 Details,Package ID,0,uchar,-,ID = 2
-,Phase C Current,1,float,A(ms),
-,Phase B Current,5,float,A(ms),
-,Motor Voltage Real,9,float,V,
-,Motor Voltage Imaginary,13,float,V,
-,Motor Current Real,17,float,A,
-,Motor Current Imaginary,21,float,A,
-,Back EMF,25,float,V,
-,15V Voltage Rail Supply,29,float,V,
-,3.3V Voltage Rail Supply,33,float,V,
-,1.9V Voltage Rail Supply,37,float,V,
-,Heat-sink Temperature,41,float,deg C,
-,Motor Temperature,45,float,deg C,
-,DSP Board Temperature,49,float,deg C,
-,DC Bus Amp Hours,53,float,Ah,
-,Odometer,57,float,m,
-,Slip Speed,61,float,Hz,
+Section,Name,Address,Frequency,Field,Type,Bits,Units,Offset,Value,Packet Type
+Motor Controllers,Motor 0 Base,0x400,1Hz,Serial Number,uint32,32-63,-,-,-,CAN
+,,,,Tritium ID,uint32,0-31,-,-,-,
+,Motor 0 Status,0x401,5Hz,Receive Error Count,uint8,55-63,-,-,-,CAN
+,,,,Transmit Error Count,uint8,48-55,-,-,-,
+,,,,Active Motor,uint16,32-47,-,-,-,
+,,,,Error Flags,uint16,16-31,-,-,-,
+,,,,Limit Flags,uint16,0-15,-,-,-,
+,Motor 0 Bus,0x402,5Hz,Bus Current,float,32-63,A,-,-,CAN
+,,,,Bus Voltage,float,0-31,V,-,-,
+,Motor 0 Velocity,0x403,5Hz,Vehicle Velocity,float,32-63,m/s,-,-,CAN
+,,,,Motor Velocity,float,0-31,rpm,-,-,
+,Motor 0 Phase Current,0x404,5Hz,Phase C Current,float,32-63,Arms,-,-,CAN
+,,,,Phase B Current,float,0-31,Arms,-,-,
+,Motor 0 Voltage Vector,0x405,5Hz,Real Voltage,float,32-63,V,-,-,CAN
+,,,,Imaginary Voltage,float,0-31,V,-,-,
+,Motor 0 Current Vector,0x406,5Hz,Real Current,float,32-63,A,-,-,CAN
+,,,,Imaginary Current,float,0-31,A,-,-,
+,Motor 0 BackEMF,0x407,5Hz,Real BackEMF,float,32-63,V,-,-,CAN
+,,,,Imaginary BackEMF,float,0-31,V,-,-,
+,Motor 0 15V Rail,0x408,5Hz,Motor 0 15V Supply,float,32-63,V,-,-,CAN
+,,,,Reserved,-,0-31,-,-,-,
+,Motor 0 3.3V and 1.9V Rail,0x409,5Hz,Motor 0 3.3V Supply,float,32-63,V,-,-,CAN
+,,,,Motor 0 1.9V Supply,float,0-31,V,-,-,
+,Motor 0 Heatsink and Temperature,0x40B,5Hz,Heat Sink Temperature,float,32-63,C,-,-,CAN
+,,,,Motor Temperature,float,0-31,C,-,-,
+,Motor 0 DSP Board Temperature,0x40C,5Hz,Reserved,-,32-63,-,-,-,CAN
+,,,,DSP Board Temperature,float,0-31,C,-,-,
+,Motor 0 Odometer and Bus AmpHours,0x40E,5Hz,Bus AmpHours,float,32-63,Ah,-,-,CAN
+,,,,Odometer,float,0-31,m,-,-,
+,Motor 0 Slip Speed,0x417,5Hz,Slip Speed,float,32-63,Hz,-,-,CAN
+,,,,Reserved,-,0-31,-,-,-,
