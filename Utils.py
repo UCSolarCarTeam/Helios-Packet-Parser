@@ -10,8 +10,9 @@ ValidTypes = {
     "boolean": 1,
     "uint32": 4,
     "uint16": 2,
-    "-": 0
+    "-": 0,
 }
+
 
 class DataType:
     def __init__(self, type: str):
@@ -52,6 +53,7 @@ class DataType:
 
     def __str__(self) -> str:
         return self.base_type
+
 
 class UtilityFunctions:
     def _camelCase(string) -> str:

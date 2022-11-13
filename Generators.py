@@ -1,5 +1,6 @@
 from Utils import *
 
+
 class TypescriptGenerator:
     def __init__(self, packet_sections):
         self.packet_sections = packet_sections
