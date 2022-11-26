@@ -12,7 +12,7 @@ class CGen:
     def generate(self, output_folderpath) -> None:
         # Generate paths for header and source files
         header_filepaths = [
-            os.path.join(output_folderpath, file)
+            os.path.join(os.path.join(output_folderpath, 'C'), file)
             for file in [f"{section.section_name}.h" for section in self.sections]
         ]
 
@@ -35,7 +35,7 @@ class CGen:
 
                 # Generate packet structs
                 for packet in section.packets:
-                    f.write(f"typedef struct {packet.packet_name}\n{{\n")
+                    f.write(f"\ntypedef struct {packet.packet_name}\n{{\n")
                     for field in packet.fields:
                         if field.field_name.lower() == "reserved":
                             continue

@@ -10,9 +10,14 @@ ValidTypes = {
     "boolean": 1,
     "uint32": 4,
     "uint16": 2,
+    "number": 4,
+    "boolean": 1,
     "-": 0,
 }
 
+class PacketType:
+    CAN = 0
+    TEL = 1
 
 class DataType:
     def __init__(self, type: str):
@@ -26,16 +31,8 @@ class DataType:
     def size(self) -> int:
         return ValidTypes[self.base_type]
 
-    def typescript(self) -> str:
-        if (
-            self.base_type == "uchar"
-            or self.base_type == "float"
-            or self.base_type == "short uint"
-            or self.base_type == "uint"
-        ):
-            return "number"
-        elif self.base_type == "boolean":
-            return "boolean"
+    def ts(self) -> str:
+        return self.base_type
 
     def c(self) -> str:
         if self.base_type == "uchar":
@@ -56,9 +53,6 @@ class DataType:
 
 
 class UtilityFunctions:
-    def _camelCase(string) -> str:
-        return "".join(x for x in string.title() if not x.isspace())
-
     def _remove_spaces(string) -> str:
         return "".join(x for x in string if not x.isspace())
 
@@ -91,3 +85,7 @@ class UtilityFunctions:
         string = UtilityFunctions._remove_spaces(string)
         string = UtilityFunctions._remove_invalid_chars(string)
         return UtilityFunctions._handle_number_prefix(string)
+    
+    def ts_interface_name(name: str) -> str:
+        return 'I' + UtilityFunctions.sanitize(name)
+        

@@ -1,7 +1,9 @@
 import argparse
 
 from Generator.CGen import CGen
+from Generator.TypescriptGen import TypescriptGen
 from PacketParser import PacketParser
+from Utils import PacketType
 
 if __name__ == "__main__":
     # Parse the command line arguments
@@ -20,4 +22,5 @@ if __name__ == "__main__":
 
     parser = PacketParser(args.filename)
     parser.parse()
-    CGen(parser.get_sections()).generate(args.output)
+    CGen(parser.get_sections(PacketType.CAN)).generate(args.output)
+    TypescriptGen(parser.get_sections(PacketType.TEL)).generate(args.output)

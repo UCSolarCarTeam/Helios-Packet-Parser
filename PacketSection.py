@@ -1,10 +1,10 @@
-from Utils import UtilityFunctions
-
+from Utils import UtilityFunctions, PacketType
 
 class PacketSection:
-    def __init__(self, section_name: str):
+    def __init__(self, section_name: str, section_type: int):
         self.section_name = UtilityFunctions.sanitize(section_name)
         self.packets = []
+        self.type = section_type
 
     def __str__(self):
         return f"{self.section_name}\n" + "\n".join(
