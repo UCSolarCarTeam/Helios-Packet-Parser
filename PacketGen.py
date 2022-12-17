@@ -1,3 +1,4 @@
+import os
 import argparse
 
 from Generator.CGen import CGen
@@ -9,7 +10,11 @@ if __name__ == "__main__":
     # Parse the command line arguments
     arg_parser = argparse.ArgumentParser(description="Packet Generator")
     arg_parser.add_argument(
-        "-f", "--filename", help="The name of the file to parse", required=True
+        "-d",
+        "--directory",
+        help="The directory of files to parse",
+        required=False,
+        default=".",
     )
     arg_parser.add_argument(
         "-o",
@@ -20,7 +25,16 @@ if __name__ == "__main__":
     )
     args = arg_parser.parse_args()
 
-    parser = PacketParser(args.filename)
-    parser.parse()
-    CGen(parser.get_sections(PacketType.CAN)).generate(args.output)
-    TypescriptGen(parser.get_sections(PacketType.TEL)).generate(args.output)
+    if os.path.isdir(args.directory):
+        for file in os.listdir(args.directory):
+            if file[-4:] == ".csv":
+                if "CAN" in file:
+                    parser = PacketParser(file)
+                    parser.parse('CAN')
+                    CGen(parser.get_sections(PacketType.CAN)).generate(args.output)
+                if "TEL" in file:
+                    parser = PacketParser(file)
+                    parser.parse('TEL')
+                    TypescriptGen(parser.get_sections(PacketType.TEL)).generate(args.output)
+    else:
+        raise ValueError("Invalid directory chosen")
