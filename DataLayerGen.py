@@ -21,8 +21,8 @@ class DataLayerGen:
         self.basicHeader = " #pragma once \n #include <QObject>\n"
         self.parsedData = parsedData
         self.type = ""
-        # Test name for now is new folder
-        self.directory_name = "new_folder"
+        # Make DataLayer Folder
+        self.directory_name = "DataLayer"
         self.current_directory = os.getcwd()
         # Generate Folder path 
         self.new_directory_path = os.path.join(self.current_directory, self.directory_name)
@@ -35,11 +35,13 @@ class DataLayerGen:
     def interfaceGen(self):
         for sectionObj in self.parsedData:
             sectionName = list(sectionObj.keys())
-        
             header_file_name = "I_{section}Data.h".format(section=sectionName[0].lower().title())
-            print(sectionName[0].lower().title())
-            full_path = os.path.join(self.new_directory_path,header_file_name)
-            
+            data_folder_name = "{section}Data".format(section=sectionName[0].lower().title())
+            full_path = os.path.join(self.new_directory_path,data_folder_name)
+            # Make new folder
+            os.makedirs(full_path, exist_ok=True)
+            full_path = os.path.join(full_path,header_file_name)
+            # Create the header file
             with open(full_path,"w") as file:
                 file.write(self.basicHeader)
                 file.write("class {name} : public QObject \n{{\n    QOBJECT\npublic:\n".format(name=header_file_name[:-1]))
@@ -57,6 +59,7 @@ class DataLayerGen:
                     file.write("virtual void set{attributeName}(const {type}& {attributeName}) = 0\n".format(type=self.type,attributeName=attribute.get("Name")))
 
                 file.write("}")
+                file.close()
                 
             
        
