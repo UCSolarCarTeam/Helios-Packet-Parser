@@ -49,11 +49,15 @@ class DataLayerGen:
                 file.write("virtual ~{name}() {{}}\n".format(name=header_file_name[:-2]))
                 # Write the getters
                 for attribute in sectionObj.get(sectionName[0]):
+                    if (attribute.get("Name") == "PackageID"):
+                        continue
                     if (attribute.get("Type")== "uchar"):
                         self.type = "unsigned char"
-                    file.write("virtual {type} {attributeName}() const = 0\n".format(type=self.type,attributeName=attribute.get("Name")))
+                    file.write("virtual {type} get{attributeName}() const = 0\n".format(type=self.type,attributeName=attribute.get("Name")))
                 # Write setter
                 for attribute in sectionObj.get(sectionName[0]):
+                    if (attribute.get("Name") == "PackageID"):
+                        continue
                     if (attribute.get("Type")== "uchar"):
                         self.type = "unsigned char"
                     file.write("virtual void set{attributeName}(const {type}& {attributeName}) = 0\n".format(type=self.type,attributeName=attribute.get("Name")))
