@@ -18,7 +18,7 @@ data = [
 class DataLayerGen:
     
     def __init__ (self, parsedData=data):
-        self.basicHeader = " #pragma once \n #include <QObject>\n"
+        self.basicHeader = '#pragma once \n#include "qtMethods.h"\n' 
         self.parsedData = parsedData
         self.type = ""
         # Make DataLayer Folder
@@ -30,45 +30,108 @@ class DataLayerGen:
         os.makedirs(self.new_directory_path, exist_ok=True)
         print(self.new_directory_path)
        
-        
+    def genQMethods(self,path):
+        fileName = "qtMethods.h"
+        fullPath = os.path.join(path,fileName)
+        with open(fullPath, 'w') as file:
+            file.write("#include <QObject>\n")
+            file.write("#include <QPair>\n")
+            file.write("#include <QString>\n")
+            file.write("#include <QScopedArrayPointer>\n")
+            file.close()
 
     def interfaceGen(self):
         for sectionObj in self.parsedData:
             sectionName = list(sectionObj.keys())
-            header_file_name = "I_{section}Data.h".format(section=sectionName[0].lower().title())
             data_folder_name = "{section}Data".format(section=sectionName[0].lower().title())
             full_path = os.path.join(self.new_directory_path,data_folder_name)
-            # Make new folder
+             # Make new folder
             os.makedirs(full_path, exist_ok=True)
-            full_path = os.path.join(full_path,header_file_name)
+            # Generate standard QMethod file
+            self.genQMethods(full_path)
+            # If MPPT need to gen unit
+            if (sectionName[0] == 'MPPT'):
+                header_file_name = "I_{section}Unit.h".format(section=sectionName[0].lower().title())
+                filePath = os.path.join(full_path,header_file_name)
+                with open(filePath,"w") as file:
+                    file.write(self.basicHeader)
+                    file.write("class {name} : public QObject \n{{\nQOBJECT\npublic:\n".format(name=header_file_name[:-2]))
+                    # Destructor
+                    file.write("\tvirtual ~{name}() {{}}\n".format(name=header_file_name[:-2]))
+                    # Write the getters
+                    for attribute in sectionObj.get(sectionName[0]):
+                        if (attribute.get("Name") == "PackageID"):
+                            continue
+                        if (attribute.get("Type")== "uchar"):
+                            self.type = "unsigned char"
+                        file.write("\tvirtual {type} get{attributeName}() const = 0\n".format(type=self.type,attributeName=attribute.get("Name")))
+                    # Write setter
+                    for attribute in sectionObj.get(sectionName[0]):
+                        if (attribute.get("Name") == "PackageID"):
+                            continue
+                        if (attribute.get("Type") == "uchar"):
+                            self.type = "unsigned char"
+                        elif (attribute.get("Type") == "short uint"):
+                            self.type = "unsigned short"
+                        file.write("\tvirtual void set{attributeName}(const {type}& {attributeName}) = 0\n".format(type=self.type,attributeName=attribute.get("Name")))
+                    file.write("}")
+                    file.close()
+                filePath = ""
+                # Header File gen
+                header_file_name = "I_{section}Data.h".format(section=sectionName[0].lower().title())
+                filePath = os.path.join(full_path,header_file_name)
+                # Special case for MPPT
+                with open(filePath,"w") as file:
+                    file.write(self.basicHeader)
+                    file.write('#include "I_{section}Unit.h"\n'.format(section=sectionName[0].lower().title()))
+                    file.write("class {name} : public QObject \n{{\nQOBJECT\npublic:\n".format(name=header_file_name[:-2]))
+                    # Destructor
+                    file.write("\tvirtual ~{name}() {{}}\n".format(name=header_file_name[:-2]))
+                    # Body
+                    file.write("\tvirtual unsigned char getNumberOfUnits() const = 0;\n")
+                    file.write("\tvirtual I_MpptUnit& getMpptUnit(const unsigned char& index) const = 0;")
+                    file.write("}")
+                    file.close()
+                continue
+           
             # Create the header file
             with open(full_path,"w") as file:
                 file.write(self.basicHeader)
-                file.write("class {name} : public QObject \n{{\n    QOBJECT\npublic:\n".format(name=header_file_name[:-1]))
+                file.write("class {name} : public QObject \n{{\nQOBJECT\npublic:\n".format(name=header_file_name[:-1]))
                 # Destructor
-                file.write("virtual ~{name}() {{}}\n".format(name=header_file_name[:-2]))
+                file.write("\tvirtual ~{name}() {{}}\n".format(name=header_file_name[:-2]))
                 # Write the getters
                 for attribute in sectionObj.get(sectionName[0]):
                     if (attribute.get("Name") == "PackageID"):
                         continue
                     if (attribute.get("Type")== "uchar"):
                         self.type = "unsigned char"
-                    file.write("virtual {type} get{attributeName}() const = 0\n".format(type=self.type,attributeName=attribute.get("Name")))
+                    file.write("\tvirtual {type} get{attributeName}() const = 0\n".format(type=self.type,attributeName=attribute.get("Name")))
                 # Write setter
                 for attribute in sectionObj.get(sectionName[0]):
                     if (attribute.get("Name") == "PackageID"):
                         continue
                     if (attribute.get("Type")== "uchar"):
                         self.type = "unsigned char"
-                    file.write("virtual void set{attributeName}(const {type}& {attributeName}) = 0\n".format(type=self.type,attributeName=attribute.get("Name")))
+                    elif (attribute.get("Type" == "short uint")):
+                        self.type = "unsigned short"
+                    file.write("\tvirtual void set{attributeName}(const {type}& {attributeName}) = 0\n".format(type=self.type,attributeName=attribute.get("Name")))
 
                 file.write("}")
                 file.close()
-                
-            
-       
+
+    def headerFileGen(self):
+        for sectionObj in self.parsedData:
+            sectionName = list(sectionObj.keys())
+            data_folder_name = "{section}Data".format(section=sectionName[0].lower().title())
+            full_path = os.path.join(self.new_directory_path,data_folder_name)
+            header_file_name = "{section}Data.h".format(section= sectionName[0].lower().Title)
+            filePath = os.path.join(full_path,header_file_name)
             
 
-        
+
+
+
+                
 tmp = DataLayerGen()
 tmp.interfaceGen()
