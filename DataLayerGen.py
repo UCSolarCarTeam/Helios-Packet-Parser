@@ -15,6 +15,20 @@ data = [
         ]
     }
 ]
+data2 =[
+    {
+        "DriverControls": [
+            {"Name": "PackageID", "Offset": 0, "Type": "uchar", "Unit": "", "detail": "ID=4"},
+            {"Name": "DriverControlsBoardAlive", "Offset":1, "Type":"uchar", "Unit":"boolean","detail":""},
+            {"Name": "LightsInputs", "Offset":2, "Type":"uchar", "Unit":"bitflag", "detail": ["0x01 Headlights Off","0x02 Headlights Low","0x04 Headlights High","0x08 Signal Right","0x10 Signal Left","0x20 Hazard","0x40 Interior"]},
+            {"Name": "MusicInput", "Offset":3,"Type":"uchar","Unit":"bitflage","detail": ["0x01 Volume Up","0x02 Volume Down","0x04 Next Song","0x08 Prev Song"]},
+            {"Name": "Acceleration", "Offset": 4, "Type": "short uint", "Unit": "12bit uint", "detail": ""},
+            {"Name": "RegenBraking", "Offset": 6, "Type": "short uint", "Unit": "12bit uint", "detail": "" },
+            {"Name": "DriverInputs", "Offset": 8, "Type": "uchar", "Unit": "bitflag", "detail": ["0x01 Brakes","0x02 Forward", "0x04 Reverse","0x08 Push to Talk","0x10 Horn","0x20 Reset","0x40 Aux","0x80 Lap"]},
+        ]
+    }
+]
+
 class DataLayerGen:
     
     def __init__ (self, parsedData=data):
