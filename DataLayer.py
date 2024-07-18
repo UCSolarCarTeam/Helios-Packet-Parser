@@ -5,11 +5,27 @@ data =[
         "DriverControls": [
             {"Name": "PackageID", "Offset": 0, "Type": "uchar", "Unit": "", "detail": "ID=4"},
             {"Name": "DriverControlsBoardAlive", "Offset":1, "Type":"uchar", "Unit":"boolean","detail":""},
-            {"Name": "LightsInputs", "Offset":2, "Type":"uchar", "Unit":"bitflag", "detail": ["Headlights Off","Headlights Low","Headlights High","Signal Right","Signal Left","Hazard","Interior"]},
-            {"Name": "MusicInput", "Offset":3,"Type":"uchar","Unit":"bitflag","detail": ["Volume Up","Volume Down","Next Song","Prev Song"]},
+            {"Name": "LightsInputs", "Offset":2, "Type":"uchar", "Unit":"bitflag", "detail": [  { "0x01": "Headlights Off" },
+  { "0x02": "Headlights Low" },
+  { "0x04": "Headlights High" },
+  { "0x08": "Signal Right" },
+  { "0x10": "Signal Left" },
+  { "0x20": "Hazard" },
+  { "0x40": "Interior" }]},
+            {"Name": "MusicInput", "Offset":3,"Type":"uchar","Unit":"bitflag","detail": [{ "0x01": "Volume Up" },
+  { "0x02": "Volume Down" },
+  { "0x04": "Next Song" },
+  { "0x08": "Prev Song" }]},
             {"Name": "Acceleration", "Offset": 4, "Type": "short uint", "Unit": "12bit uint", "detail": ""},
             {"Name": "RegenBraking", "Offset": 6, "Type": "short uint", "Unit": "12bit uint", "detail": "" },
-            {"Name": "DriverInputs", "Offset": 8, "Type": "uchar", "Unit": "bitflag", "detail": ["Brakes","Forward", "Reverse","Push to Talk","Horn","Reset","Aux","Lap"]},
+            {"Name": "DriverInputs", "Offset": 8, "Type": "uchar", "Unit": "bitflag", "detail": [ { "0x01": "Brakes" },
+  { "0x02": "Forward" },
+  { "0x04": "Reverse" },
+  { "0x08": "Push to Talk" },
+  { "0x10": "Horn" },
+  { "0x20": "Reset" },
+  { "0x40": "Aux" },
+  { "0x80": "Lap"}]},
         ]
     }
 ]
@@ -53,7 +69,7 @@ class DataLayer:
                 file.write("class I_{packetName}Data:public QObject \n{{\n\tQObject\n".format(packetName=packetName))
                 file.write("public:\n")
                 # Deconstructor
-                file.write("\tvirtual ~I_{packetName}Data() {{}}\n".format(packetName=packetName))
+                file.write("\tvirtual ~I_{packetName}Data() {{}};\n".format(packetName=packetName))
                 # Getter
                 for attribute in packetData:
                     # if bit flag unit, needs to make setter and getter for details.
@@ -62,7 +78,8 @@ class DataLayer:
                     if(attribute["Unit"] == "bitflag"):
                         # iterate through detail
                         for item in attribute["detail"]:
-                            noSpaceString = item.lstrip()
+                            value = list(item.values())[0] 
+                            noSpaceString = value.lstrip()
                             noSpaceString = noSpaceString.replace(" ", "")
                             # Write getter
                             file.write("\tvirtual bool get{noSpaceString}() const = 0;\n".format(noSpaceString = noSpaceString))
@@ -107,7 +124,7 @@ class DataLayer:
                 file.write("class {packetName}Data:public I_{packetName}Data \n{{\n".format(packetName=packetName))
                 file.write("public:\n")
                 # Constructor
-                file.write("\t{packetName}Data()\n".format(packetName = packetName))
+                file.write("\t{packetName}Data();\n".format(packetName = packetName))
                 # Deconstructor
                 file.write("\tvirtual ~{packetName}Data() {{}}\n".format(packetName=packetName))
                 # Getter
@@ -118,7 +135,8 @@ class DataLayer:
                     if(attribute["Unit"] == "bitflag"):
                         # iterate through detail
                         for item in attribute["detail"]:
-                            noSpaceString = item.lstrip()
+                            value = list(item.values())[0] 
+                            noSpaceString = value.lstrip()
                             noSpaceString = noSpaceString.replace(" ", "")
                             # Write getter
                             file.write("\t bool get{noSpaceString}() const;\n".format(noSpaceString = noSpaceString))
@@ -156,6 +174,118 @@ class DataLayer:
                     file.write("\t {type} {name}_;\n".format(type = type, name = lower_first_letter))
                 file.write("\n")
                 file.write("};")
+
+    def genCppFile(self):
+        for packet in self.parsedData:
+            packetName = list(packet.keys())[0]
+            packetData = packet[packetName]
+            # Make the folder Name
+            dataFolderNamePath = os.path.join(self.new_directory_path,packetName+"Data")
+            os.makedirs(dataFolderNamePath,exist_ok=True)
+            # Make the header file
+            cppFileName = "{packetName}Data.cpp".format(packetName=packetName)
+            filePath = os.path.join(dataFolderNamePath,cppFileName)
+            with open(filePath, "w") as file:
+                file.write('#include "{packetName}Data.h"\n'.format(packetName = packetName))
+                file.write("namespace\n{")
+                # Write Namespace
+                for attribute in packetData:
+                    # looking for bitflag in unit
+                    if(attribute["Name"] == "PackageID"):
+                        continue
+                    if(attribute["Unit"] == "bitflag"):
+                        # iterate through detail
+                        for item in attribute["detail"]:
+                            if(attribute["Type"] == "uchar"):
+                                type = "unsigned char"
+                            elif (attribute["Type"] == "short uint"):
+                                type = "unsigned short"
+                            value = list(item.values())[0] 
+                            key = list(item.keys())[0]
+                            editedString = value.lstrip()
+                            editedString = editedString.replace(" ", "_").upper()
+                            # Write getter
+                            file.write("\t const {type} {name}_OFFSET= {key};\n".format(type=type,name=editedString,key=key))
+                        continue
+                file.write("}\n")
+                # write constructor
+                file.write("{packetName}Data::{packetName}Data():\n\t".format(packetName=packetName))
+                for i, attribute in enumerate(packetData):
+                    if attribute["Name"] == "PackageID":
+                            continue
+                    
+                    name = attribute["Name"].replace(" ", "")
+                    lower_first_letter = name[0].lower() + name[1:]
+        
+                    if i == len(packetData) - 1:
+                        file.write("{name}_(0)\n\t".format(name=lower_first_letter))
+                    else:
+                        file.write("{name}_(0)\n\t,".format(name=lower_first_letter))
+                file.write("\n{}")
+                # Write Deconstructor
+                file.write("\n{packetName}Data::~{packetName}Data(){{}}\n".format(packetName=packetName))
+                # Write Getters
+                for attribute in packetData:
+                    # if bit flag unit, needs to make setter and getter for details.
+                    if(attribute["Name"] == "PackageID"):
+                        continue
+                    if(attribute["Unit"] == "bitflag"):
+                        # iterate through detail
+                        for item in attribute["detail"]:
+                            value = list(item.values())[0] 
+                            editedString = value.lstrip()
+                            editedString = editedString.replace(" ", "_").upper()
+                            noSpaceString = value.lstrip()
+                            noSpaceString = noSpaceString.replace(" ", "")
+                            name = attribute["Name"].replace(" ", "")
+                            lower_first_letter = name[0].lower() + name[1:]
+                            # Write getter
+                            file.write("bool {packetName}Data::get{name}() const\n{{\n".format(type = type,packetName=packetName,name = noSpaceString))
+                            file.write("\treturn static_cast<bool>({lower_first_letter}_ & {editedString}_OFFSET);\n".format(type=type,lower_first_letter=lower_first_letter,editedString=editedString))
+                            file.write("}\n")
+                        continue
+                    value = list(item.values())[0] 
+                    editedString = value.lstrip()
+                    editedString = editedString.replace(" ", "_").upper()
+                    noSpaceString = value.lstrip()
+                    noSpaceString = noSpaceString.replace(" ", "")
+                    if(attribute["Type"] == "uchar"):
+                        type = "unsigned char"
+                        if (attribute["Unit"] == "boolean"):
+                            type = "bool"
+                    elif (attribute["Type"] == "short uint"):
+                        type = "unsigned short"
+                        if (attribute["Unit"] == "boolean"):
+                            type = "bool"
+                    name = attribute["Name"].replace(" ", "")
+                    lower_first_letter = name[0].lower() + name[1:]
+                    file.write("{type} {packetName}Data::get{name}() const\n{{\n".format(type = type,packetName=packetName,name = name))
+                    file.write("\treturn static_cast<{type}>({lower_first_letter}_);\n".format(type=type,lower_first_letter=lower_first_letter,editedString=editedString))
+                    file.write("}\n")
+                # Write Setter
+                for attribute in packetData:
+                    # if bit flag unit, needs to make setter and getter for details.
+                    if(attribute["Name"] == "PackageID"):
+                        continue
+                    value = list(item.values())[0] 
+                    editedString = value.lstrip()
+                    editedString = editedString.replace(" ", "_").upper()
+                    noSpaceString = value.lstrip()
+                    noSpaceString = noSpaceString.replace(" ", "")
+                    if(attribute["Type"] == "uchar"):
+                        type = "unsigned char"
+                        
+                    elif (attribute["Type"] == "short uint"):
+                        type = "unsigned short"
+            
+                    name = attribute["Name"].replace(" ", "")
+                    lower_first_letter = name[0].lower() + name[1:]
+                    file.write("void {packetName}Data::set{name}(const {type}& {lower_first_letter})\n{{\n".format(type = type,packetName=packetName,name = name, lower_first_letter=lower_first_letter))
+                    file.write("\t{name}_  =  {name};\n".format(name=lower_first_letter))
+                    file.write("}\n")
+                    
+                        
+                
                 
                     
                 
@@ -165,3 +295,4 @@ class DataLayer:
 test = DataLayer()
 test.generateInterface()
 test.generateHeader()
+test.genCppFile()
