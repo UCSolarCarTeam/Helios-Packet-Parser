@@ -12,16 +12,16 @@ data =[
   { "0x10": "Signal Left" },
   { "0x20": "Hazard" },
   { "0x40": "Interior" }]},
-            {"Name": "MusicInput", "Offset":3,"Type":"uchar","Unit":"bitflag","detail": [{ "0x01": "Volume Up" },
+            {"Name": "MusicInputs", "Offset":3,"Type":"uchar","Unit":"bitflag","detail": [{ "0x01": "Volume Up" },
   { "0x02": "Volume Down" },
   { "0x04": "Next Song" },
-  { "0x08": "Prev Song" }]},
+  { "0x08": "Previous Song" }]},
             {"Name": "Acceleration", "Offset": 4, "Type": "short uint", "Unit": "12bit uint", "detail": ""},
             {"Name": "RegenBraking", "Offset": 6, "Type": "short uint", "Unit": "12bit uint", "detail": "" },
             {"Name": "DriverInputs", "Offset": 8, "Type": "uchar", "Unit": "bitflag", "detail": [ { "0x01": "Brakes" },
   { "0x02": "Forward" },
   { "0x04": "Reverse" },
-  { "0x08": "Push to Talk" },
+  { "0x08": "Push To Talk" },
   { "0x10": "Horn" },
   { "0x20": "Reset" },
   { "0x40": "Aux" },
@@ -32,7 +32,7 @@ data =[
 
 class DataLayer:
     def __init__(self, json=data):
-        self.basicHeader = '#pragma once \n#include "qtMethods.h"\n'
+        self.basicHeader = '#pragma once \n#include <qtMethods.h>\n'
         self.parsedData = json
         # Make DataLayer Folder
         self.directory_name = "DataLayer"
@@ -43,9 +43,9 @@ class DataLayer:
         os.makedirs(self.new_directory_path, exist_ok=True)
         print(self.new_directory_path)
 
-    def genQMethods(self,path):
+    def genQMethods(self):
         fileName = "qtMethods.h"
-        fullPath = os.path.join(path,fileName)
+        fullPath = os.path.join(self.new_directory_path,fileName)
         with open(fullPath, 'w') as file:
             file.write("#include <QObject>\n")
             file.write("#include <QPair>\n")
@@ -65,8 +65,8 @@ class DataLayer:
             filePath = os.path.join(dataFolderNamePath,headerFileName)
             with open(filePath, "w") as file:
                 file.write("#pragma once\n")
-                file.write("#include qtMethods.h\n")
-                file.write("class I_{packetName}Data:public QObject \n{{\n\tQObject\n".format(packetName=packetName))
+                file.write("#include <../DataLayer/qtMethods.h>\n")
+                file.write("class I_{packetName}Data:public QObject \n{{\nQ_OBJECT\n".format(packetName=packetName))
                 file.write("public:\n")
                 # Deconstructor
                 file.write("\tvirtual ~I_{packetName}Data() {{}};\n".format(packetName=packetName))
@@ -126,7 +126,7 @@ class DataLayer:
                 # Constructor
                 file.write("\t{packetName}Data();\n".format(packetName = packetName))
                 # Deconstructor
-                file.write("\tvirtual ~{packetName}Data() {{}}\n".format(packetName=packetName))
+                file.write("\tvirtual ~{packetName}Data();\n".format(packetName=packetName))
                 # Getter
                 for attribute in packetData:
                     # if bit flag unit, needs to make setter and getter for details.
@@ -293,6 +293,7 @@ class DataLayer:
 
 
 test = DataLayer()
+test.genQMethods()
 test.generateInterface()
 test.generateHeader()
 test.genCppFile()
