@@ -234,35 +234,35 @@ data =[
 #     ]
 # }
 # ]},
-# {
-#     "Lights":
-#     [
-#     {
-#     "Name": "Lights Alive",
-#     "Offset": 1,
-#     "Type": "uchar",
-#     "Unit": "Boolean",
-#     "detail": [
-#         {"0": "Off"},
-#         {"1": "On"}
-#     ]
-#     },
-#     {
-#         "Name": "Lights Status",
-#         "Offset": 2,
-#         "Type": "uchar",
-#         "Unit": "bitflag",
-#         "detail": [
-#             {"0x01": "Low Beams"},
-#             {"0x02": "High Beams"},
-#             {"0x04": "Brake Lights"},
-#             {"0x08": "Left Signal"},
-#             {"0x10": "Right Signal"},
-#             {"0x20": "Bms Strobe Light"}
-#         ]
-#     }
-#     ]
-# },
+ {
+    "Lights":
+    [
+    {
+    "Name": "Lights Alive",
+    "Offset": 1,
+    "Type": "uchar",
+    "Unit": "Boolean",
+    "detail": [
+        {"0": "Off"},
+        {"1": "On"}
+    ]
+    },
+    {
+        "Name": "Lights Status",
+        "Offset": 2,
+        "Type": "uchar",
+        "Unit": "bitflag",
+        "detail": [
+            {"0x01": "Low Beams"},
+            {"0x02": "High Beams"},
+            {"0x04": "Brake Lights"},
+            {"0x08": "Left Signal"},
+            {"0x10": "Right Signal"},
+            {"0x20": "Bms Strobe Light"}
+        ]
+    }
+    ]
+},
 # {
 #     "MotorDetails": [
 #         {
