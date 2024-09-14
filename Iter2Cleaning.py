@@ -36,23 +36,23 @@ class DataLayer:
         elif (attribute["Type"] == "short uint"):
             return "unsigned short"
         
-    def motorFaultsNameSpaceGenerate(self, packetData,file):
+    def nameSpaceGenerator(self,packetName, packetData,file):
         for attribute in packetData:
-        # looking for bitflag in unit
+            # Skip PackageID
             if(attribute["Name"] == "PackageID"):
                 continue
+            # looking for bitflag in unit
             if(attribute["Unit"] == "bitflag"):
-                # iterate through detail
-                if(attribute["Name"] == "M0 Error Flags" or attribute["Name"] == "M0 Limit Flags"):
-                    for item in attribute["detail"]:
-                        type = self.determineType(attribute)
-                        value = list(item.values())[0] 
-                        key = list(item.keys())[0]
-                        editedString = value.lstrip()
-                        editedString = editedString.replace(" ", "_").upper()
-                        # Write getter
-                        file.write("\t const {type} {name}_OFFSET= {key};\n".format(type=type,name=editedString,key=key))
-                    continue
+                #iterate through detail
+                for item in attribute["detail"]:
+                    type = self.determineType(attribute)
+                    value = list(item.values())[0] 
+                    key = list(item.keys())[0]
+                    editedString = value.lstrip().replace(" ", "_").upper()
+                    # Write namespace
+                    file.write("\t const {type} {name}_OFFSET= {key};\n".format(type=type,name=editedString,key=key))
+                continue
+            
 
     def generateInterface(self):
         for packet in self.parsedData:
@@ -152,17 +152,13 @@ class DataLayer:
                     if(attribute["Unit"] == "bitflag"):
                         # iterate through detail
                         for item in attribute["detail"]:
+                            motorNum = ""
                             value = list(item.values())[0] 
-                            noSpaceString = value.lstrip()
-                            noSpaceString = noSpaceString.replace(" ", "")
-                            # Special Case for MotorFaults due to needing motor number
+                            noSpaceString = value.lstrip().replace(" ", "")
                             if (packetName == "MotorFaults"):
                                 # Get motor number
                                 motorNum = attribute["Name"][:2].lower()
-                                file.write("\t bool {motorNum}{noSpaceString}() const;\n".format(noSpaceString = noSpaceString,motorNum=motorNum))
-                            # Path Handles other cases that are not MotorFaults
-                            else:
-                                file.write("\t bool get{noSpaceString}() const;\n".format(noSpaceString = noSpaceString))
+                            file.write("\t bool get{motorNum}{noSpaceString}() const;\n".format(motorNum = motorNum,noSpaceString = noSpaceString))
                     # Determine Type of Data
                     type = self.determineType(attribute)
                     name = attribute["Name"].replace(" ", "")
@@ -210,24 +206,7 @@ class DataLayer:
                 file.write("namespace\n{")
                 # Write Namespace
                 # Name space for motorFaults
-                if (packetName == "MotorFaults"):
-                    self.motorFaultsNameSpaceGenerate(packetData,file)
-                else:
-                    for attribute in packetData:
-                        # Skip PackageID
-                        if(attribute["Name"] == "PackageID"):
-                            continue
-                        # looking for bitflag in unit
-                        if(attribute["Unit"] == "bitflag"):
-                            # iterate through detail
-                            for item in attribute["detail"]:
-                                type = self.determineType(attribute)
-                                value = list(item.values())[0] 
-                                key = list(item.keys())[0]
-                                editedString = value.lstrip().replace(" ", "_").upper()
-                                # Write getter
-                                file.write("\t const {type} {name}_OFFSET= {key};\n".format(type=type,name=editedString,key=key))
-                            continue
+                self.nameSpaceGenerator(packetName,packetData,file)
                 file.write("}\n")
                 # write constructor
                 file.write("{packetName}Data::{packetName}Data():\n\t".format(packetName=packetName))
@@ -278,8 +257,7 @@ class DataLayer:
                                 file.write("bool {packetName}Data::get{name}() const\n{{\n".format(type = type,packetName=packetName,name = noSpaceString))
                                 file.write("\treturn static_cast<bool>({lower_first_letter}_ & {editedString}_OFFSET);\n".format(type=type,lower_first_letter=lower_first_letter,editedString=editedString))
                                 file.write("}\n")
-                        
-                    value = list(item.values())[0] 
+                    value = list(attribute.values())[0] 
                     noSpaceString = value.lstrip().replace(" ", "")
                     type = self.determineType(attribute)
                     name = attribute["Name"].replace(" ", "")
