@@ -39,10 +39,14 @@ class DataLayer:
     def nameSpaceGenerator(self,packetName, packetData,file):
         for attribute in packetData:
             # Skip PackageID
+            notSkip = True
             if(attribute["Name"] == "PackageID"):
                 continue
+            # Skip other iteration for other motor number
+            if (attribute["Name"][0:2] != "M0"):
+                notSkip = False
             # looking for bitflag in unit
-            if(attribute["Unit"] == "bitflag"):
+            if(attribute["Unit"] == "bitflag" and notSkip):
                 #iterate through detail
                 for item in attribute["detail"]:
                     type = self.determineType(attribute)
