@@ -1,21 +1,21 @@
 data =[
     {
         "DriverControls": [
-            {"Name": "PackageID", "Offset": 0, "Type": "uchar", "Unit": "", "detail": "ID=4"},
-            {"Name": "DriverControlsBoardAlive", "Offset":1, "Type":"uchar", "Unit":"boolean","detail":""},
+            {"Name": "PackageID", "Offset": 0, "Type": "uchar", "Unit": "", "detail": "ID=4","enum":{}},
+            {"Name": "DriverControlsBoardAlive", "Offset":1, "Type":"uchar", "Unit":"boolean","detail":"","enum":{}},
             {"Name": "LightsInputs", "Offset":2, "Type":"uchar", "Unit":"bitflag", "detail": [  { "0x01": "Headlights Off" },
   { "0x02": "Headlights Low" },
   { "0x04": "Headlights High" },
   { "0x08": "Signal Right" },
   { "0x10": "Signal Left" },
   { "0x20": "Hazard" },
-  { "0x40": "Interior" }]},
+  { "0x40": "Interior" }],"enum":{}},
             {"Name": "MusicInputs", "Offset":3,"Type":"uchar","Unit":"bitflag","detail": [{ "0x01": "Volume Up" },
   { "0x02": "Volume Down" },
   { "0x04": "Next Song" },
-  { "0x08": "Previous Song" }]},
-            {"Name": "Acceleration", "Offset": 4, "Type": "short uint", "Unit": "12bit uint", "detail": ""},
-            {"Name": "RegenBraking", "Offset": 6, "Type": "short uint", "Unit": "12bit uint", "detail": "" },
+  { "0x08": "Previous Song" }],"enum":{}},
+            {"Name": "Acceleration", "Offset": 4, "Type": "short uint", "Unit": "12bit uint", "detail": "","enum":{}},
+            {"Name": "RegenBraking", "Offset": 6, "Type": "short uint", "Unit": "12bit uint", "detail": "","enum":{}},
             {"Name": "DriverInputs", "Offset": 8, "Type": "uchar", "Unit": "bitflag", "detail": [ { "0x01": "Brakes" },
   { "0x02": "Forward" },
   { "0x04": "Reverse" },
@@ -23,55 +23,55 @@ data =[
   { "0x10": "Horn" },
   { "0x20": "Reset" },
   { "0x40": "Aux" },
-  { "0x80": "Lap"}]},
+  { "0x80": "Lap"}],"enum":{}},
         ]
     },
-#     {
-#     "MotorFaults": [
-#         {"Name": "M0 Error Flags", "Offset": 1, "Type": "uchar", "Unit": "bitflag", "detail": [
-#             {"0x01": "Motor Over Speed"},
-#             {"0x02": "Software Over Current"},
-#             {"0x04": "Dc Bus Over Voltage"},
-#             {"0x08": "Bad Motor Position Hall Sequence"},
-#             {"0x10": "Watchdog Caused Last Reset"},
-#             {"0x20": "Config Read Error"},
-#             {"0x40": "Rail Under Voltage Lock Out"},
-#             {"0x80": "Desaturation Fault"}
-#         ]},
-#         {"Name": "M1 Error Flags", "Offset": 2, "Type": "uchar", "Unit": "bitflag", "detail": [
-#             {"0x01": "Motor Over Speed"},
-#             {"0x02": "Software Over Current"},
-#             {"0x04": "Dc Bus Over Voltage"},
-#             {"0x08": "Bad Motor Position Hall Sequence"},
-#             {"0x10": "Watchdog Caused Last Reset"},
-#             {"0x20": "Config Read Error"},
-#             {"0x40": "Rail Under Voltage Lock Out"},
-#             {"0x80": "Desaturation Fault"}
-#         ]},
-#         {"Name": "M0 Limit Flags", "Offset": 3, "Type": "uchar", "Unit": "bitflag", "detail": [
-#             {"0x01": "Output Voltage Pwm Limit"},
-#             {"0x02": "Motor Current Limit"},
-#             {"0x04": "Velocity Limit"},
-#             {"0x08": "Bus Current Limit"},
-#             {"0x10": "Bus Voltage Upper Limit"},
-#             {"0x20": "Bus Voltage Lower Limit"},
-#             {"0x40": "Ipm Or Motor Temperature Limit"}
-#         ]},
-#         {"Name": "M1 Limit Flags", "Offset": 4, "Type": "uchar", "Unit": "bitflag", "detail": [
-#             {"0x01": "Output Voltage Pwm Limit"},
-#             {"0x02": "Motor Current Limit"},
-#             {"0x04": "Velocity Limit"},
-#             {"0x08": "Bus Current Limit"},
-#             {"0x10": "Bus Voltage Upper Limit"},
-#             {"0x20": "Bus Voltage Lower Limit"},
-#             {"0x40": "Ipm Or Motor Temperature Limit"}
-#         ]},
-#         {"Name": "M0 Can Rx Error Count", "Offset": 5, "Type": "uchar", "Unit": "#", "detail": ""},
-#         {"Name": "M0 Can Tx Error Count", "Offset": 6, "Type": "uchar", "Unit": "#", "detail": ""},
-#         {"Name": "M1 Can Rx Error Count", "Offset": 7, "Type": "uchar", "Unit": "#", "detail": ""},
-#         {"Name": "M1 Can Tx Error Count", "Offset": 8, "Type": "uchar", "Unit": "#", "detail": ""}
-#     ]
-# },
+    {
+    "MotorFaults": [
+        {"Name": "M0 Error Flags", "Offset": 1, "Type": "uchar", "Unit": "bitflag", "detail": [
+            {"0x01": "Motor Over Speed"},
+            {"0x02": "Software Over Current"},
+            {"0x04": "Dc Bus Over Voltage"},
+            {"0x08": "Bad Motor Position Hall Sequence"},
+            {"0x10": "Watchdog Caused Last Reset"},
+            {"0x20": "Config Read Error"},
+            {"0x40": "Rail Under Voltage Lock Out"},
+            {"0x80": "Desaturation Fault"}
+        ], "enum":{}},
+        {"Name": "M1 Error Flags", "Offset": 2, "Type": "uchar", "Unit": "bitflag", "detail": [
+            {"0x01": "Motor Over Speed"},
+            {"0x02": "Software Over Current"},
+            {"0x04": "Dc Bus Over Voltage"},
+            {"0x08": "Bad Motor Position Hall Sequence"},
+            {"0x10": "Watchdog Caused Last Reset"},
+            {"0x20": "Config Read Error"},
+            {"0x40": "Rail Under Voltage Lock Out"},
+            {"0x80": "Desaturation Fault"}
+        ],"enum":{}},
+        {"Name": "M0 Limit Flags", "Offset": 3, "Type": "uchar", "Unit": "bitflag", "detail": [
+            {"0x01": "Output Voltage Pwm Limit"},
+            {"0x02": "Motor Current Limit"},
+            {"0x04": "Velocity Limit"},
+            {"0x08": "Bus Current Limit"},
+            {"0x10": "Bus Voltage Upper Limit"},
+            {"0x20": "Bus Voltage Lower Limit"},
+            {"0x40": "Ipm Or Motor Temperature Limit"}
+        ],"enum":{}},
+        {"Name": "M1 Limit Flags", "Offset": 4, "Type": "uchar", "Unit": "bitflag", "detail": [
+            {"0x01": "Output Voltage Pwm Limit"},
+            {"0x02": "Motor Current Limit"},
+            {"0x04": "Velocity Limit"},
+            {"0x08": "Bus Current Limit"},
+            {"0x10": "Bus Voltage Upper Limit"},
+            {"0x20": "Bus Voltage Lower Limit"},
+            {"0x40": "Ipm Or Motor Temperature Limit"}
+        ],"enum":{}},
+        {"Name": "M0 Can Rx Error Count", "Offset": 5, "Type": "uchar", "Unit": "#", "detail": "","enum":{}},
+        {"Name": "M0 Can Tx Error Count", "Offset": 6, "Type": "uchar", "Unit": "#", "detail": "","enum":{}},
+        {"Name": "M1 Can Rx Error Count", "Offset": 7, "Type": "uchar", "Unit": "#", "detail": "","enum":{}},
+        {"Name": "M1 Can Tx Error Count", "Offset": 8, "Type": "uchar", "Unit": "#", "detail": "","enum":{}}
+    ]
+},
 {"AuxBms":[
     {
     "Name": "PackageID",
@@ -80,56 +80,63 @@ data =[
     "Unit": "-",
     "detail": [
         {"ID=11": ""}
-    ]
+    ],
+    "enum":[]
     },
     {
     "Name": "Precharge State",
     "Offset": 1,
     "Type": "uchar",
     "Unit": "flag",
-    "detail": [
+    "detail": [],
+    "enum": {"PrechargeState":[
         {"0": "OFF"},
         {"1": "COMMON_ENGAGED"},
         {"2": "CHARGE_ENGAGED"},
         {"3": "DISCHARGE_ENGAGED"},
         {"4": "ALL_ENGAGED"},
         {"5": "INVALID_STATE"}
-    ]
+    ]}
     },
     {
     "Name": "Aux Voltage",
     "Offset": 2,
     "Type": "uchar",
     "Unit": "mV",
-    "detail": []
+    "detail": [],
+    "enum":{}
     },
     {
     "Name": "Aux Bms Alive",
     "Offset": 3,
     "Type": "uchar",
     "Unit": "Boolean",
-    "detail": []
+    "detail": [],
+    "enum":{}
     },
     {
     "Name": "Strobe Bms Light",
     "Offset": 4,
     "Type": "uchar",
     "Unit": "Boolean",
-    "detail": []
+    "detail": [],
+    "enum":{}
     },
     {
     "Name": "Allow Charge",
     "Offset": 5,
     "Type": "uchar",
     "Unit": "Boolean",
-    "detail": []
+    "detail": [],
+    "enum":{}
     },
     {
     "Name": "High Voltage Enable State",
     "Offset": 6,
     "Type": "uchar",
     "Unit": "Boolean",
-    "detail": []
+    "detail": [],
+    "enum":{}
     },
     {
     "Name": "Allow Discharge",
@@ -137,13 +144,15 @@ data =[
     "Type": "uchar",
     "Unit": "Boolean",
     "detail": []
+    ,"enum":{}
     },
     {
     "Name": "Orion Can Received Recently",
     "Offset": 8,
     "Type": "uchar",
     "Unit": "Boolean",
-    "detail": []
+    "detail": [],
+    "enum": {}
     },
     {
     "Name": "Aux Contactor Debug Info",
@@ -158,7 +167,8 @@ data =[
         {"0x10": "Charge Should Trip"},
         {"0x20": "Charge Open But Should Be Closed"},
         {"0x40": "Discharge Open But Should Be Closed"}
-    ]
+    ],
+    "enum":{}
     },
     {
     "Name": "Aux Trip",
@@ -177,7 +187,8 @@ data =[
         {"0x0100": "Charge Not Closed Due To High Current"},
         {"0x0200": "Discharge Not Closed Due To High Current"},
         {"0x0400": "Trip Due To Contactor Disconnected Unexpectedly"}
-    ]
+    ],
+    "enum":{}
     },
     ]
 },
@@ -234,37 +245,39 @@ data =[
 #     ]
 # }
 # ]},
- {
-    "Lights":
-    [
-    {
-    "Name": "Lights Alive",
-    "Offset": 1,
-    "Type": "uchar",
-    "Unit": "Boolean",
-    "detail": [
-        {"0": "Off"},
-        {"1": "On"}
-    ]
-    },
-    {
-        "Name": "Lights Status",
-        "Offset": 2,
-        "Type": "uchar",
-        "Unit": "bitflag",
-        "detail": [
-            {"0x01": "Low Beams"},
-            {"0x02": "High Beams"},
-            {"0x04": "Brake Lights"},
-            {"0x08": "Left Signal"},
-            {"0x10": "Right Signal"},
-            {"0x20": "Bms Strobe Light"}
-        ]
-    }
-    ]
-},
+#  {
+#     "Lights":
+#     [
+#     {
+#     "Name": "Lights Alive",
+#     "Offset": 1,
+#     "Type": "uchar",
+#     "Unit": "Boolean",
+#     "detail": [
+#         {"0": "Off"},
+#         {"1": "On"}
+#     ],
+#     "enum":[]
+#     },
+#     {
+#         "Name": "Lights Status",
+#         "Offset": 2,
+#         "Type": "uchar",
+#         "Unit": "bitflag",
+#         "detail": [
+#             {"0x01": "Low Beams"},
+#             {"0x02": "High Beams"},
+#             {"0x04": "Brake Lights"},
+#             {"0x08": "Left Signal"},
+#             {"0x10": "Right Signal"},
+#             {"0x20": "Bms Strobe Light"}
+#         ],
+#         "enum":[]
+#     }
+#     ]
+# },
 # {
-#     "MotorDetails": [
+#     "KeyMotor": [
 #         {
 #             "Name": "M0 Alive",
 #             "Offset": 1,

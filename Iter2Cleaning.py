@@ -74,33 +74,39 @@ class DataLayer:
                 # QString if motor faults:
                 if(packetName == "MotorFaults"):
                     file.write("\tvirtual QString toString() const = 0;\n")
-                if(packetName == "AuxBms"):
-                    file.write(" \tenum PrechargeState\n{\n\tOFF=0,\n\tCOMMON_ENGAGED=1,\n\tCHARGE_ENGAGED=2,\n\tDISCHARGE_ENGAGED=3,\n\tALL_ENGAGED=4,\n\tINVALID_STATE=5,\n};\n")
-
                 # Getter
                 for attribute in packetData:
-                    ranMotor = False
                     # Setting Type
                     type = self.determineType(attribute)
                     # Ignore PackageID parse, maybe can remove if parsed json recieve will never send this
                     if(attribute["Name"] == "PackageID"):
                         continue
+                    # This package contains an enum to generate
+                    if(attribute["enum"]):
+                        enumName = list(attribute["enum"].items())[0][0]
+                        listValues = list(attribute["enum"].items())[0][1]
+                        file.write("\t enum {enumName}\n{{\n".format(enumName=enumName))
+                        for object in listValues:
+                            key=(list(object.items())[0][0])
+                            value =(list(object.items())[0][1])
+                            file.write("\t{macroName}={macroValue},\n".format(macroName=value,macroValue=key))
+                        file.write("};\n")    
                     # If has bitflag, need to iterate through list in details and create proper functions.
                     if(attribute["Unit"] == "bitflag"):
+                        # Motor number empty by default, and given a value when motor data packet is detected
+                        motorNum=""
+                        if (packetName == "MotorFaults"):
+                            # Get motor number
+                            motorNum = attribute["Name"][:2]
                         # iterate through detail
                         for item in attribute["detail"]:
                             value = list(item.values())[0] 
                             noSpaceString = value.lstrip().replace(" ","")
-                            if (packetName == "MotorFaults"):
-                                # Get motor number
-                                motorNum = attribute["Name"][:2].lower()
-                                file.write("\tvirtual bool {motorNum}{noSpaceString}() const = 0;\n".format(noSpaceString = noSpaceString,motorNum=motorNum))
-                            else:
-                                file.write("\tvirtual bool get{noSpaceString}() const = 0;\n".format(noSpaceString = noSpaceString))
+                            file.write("\tvirtual bool get{motorNum}{noSpaceString}() const = 0;\n".format(motorNum=motorNum,noSpaceString = noSpaceString))
                         continue
-                    if (ranMotor == False):
-                        name = attribute["Name"].replace(" ", "")
-                        file.write("\tvirtual {type} get{name}() const = 0;\n".format(type = type, name = name))
+                    # Write getter for main field
+                    name = attribute["Name"].replace(" ", "")
+                    file.write("\tvirtual {type} get{name}() const = 0;\n".format(type = type, name = name))
                 file.write("\n")
                 # Write out the setter for the function.
                 for attribute in packetData:

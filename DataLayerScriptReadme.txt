@@ -1,3 +1,7 @@
+Json Data Notes:
+- Need to add enum field
+- Maybe need QString field to determine if method needs to implement a QString method
+
 Current hard coded content:
 - AuxBMS: Defines an enum that is used as type for prechargeState()
     - Return type for getPrechargeState returns a unsigned char instead of enum.(DISCUSS how could this affect code?)
