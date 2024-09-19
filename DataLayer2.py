@@ -165,7 +165,7 @@ class DataLayer:
                             # If we are packaging motor related data, need to get motor number.
                             if (packetName == "MotorFaults"):
                                 # Get motor number
-                                motorNum = attribute["Name"][:2].lower()
+                                motorNum = attribute["Name"][:2]
                             file.write("\t bool get{motorNum}{noSpaceString}() const;\n".format(motorNum = motorNum,noSpaceString = noSpaceString))
                     # Determine Type of Data
                     type = self.determineType(attribute)
@@ -254,28 +254,21 @@ class DataLayer:
                             noSpaceString = value.lstrip().replace(" ", "")
                             name = attribute["Name"].replace(" ", "")
                             lower_first_letter = name[0].lower() + name[1:]
+                            motorNum=""
                             # Write getter
                             if (packetName == "MotorFaults"):
                                 # Get motor number
-                                motorNum = attribute["Name"][:2].lower()
-                                file.write("bool {packetName}Data::{motorNum}{name}() const\n{{\n".format(type = type,packetName=packetName,name = noSpaceString, motorNum=motorNum))
-                                file.write("\treturn static_cast<bool>({lower_first_letter}_ & {editedString}_OFFSET);\n".format(type=type,lower_first_letter=lower_first_letter,editedString=editedString))
-                                file.write("}\n")
-                            else:    
-                                file.write("bool {packetName}Data::get{name}() const\n{{\n".format(type = type,packetName=packetName,name = noSpaceString))
-                                file.write("\treturn static_cast<bool>({lower_first_letter}_ & {editedString}_OFFSET);\n".format(type=type,lower_first_letter=lower_first_letter,editedString=editedString))
-                                file.write("}\n")
+                                motorNum = attribute["Name"][:2]
+                            file.write("bool {packetName}Data::get{motorNum}{name}() const\n{{\n".format(type = type,packetName=packetName,name = noSpaceString, motorNum=motorNum))
+                            file.write("\treturn static_cast<bool>({lower_first_letter}_ & {editedString}_OFFSET);\n".format(type=type,lower_first_letter=lower_first_letter,editedString=editedString))
+                            file.write("}\n")
                     value = list(attribute.values())[0] 
                     noSpaceString = value.lstrip().replace(" ", "")
                     type = self.determineType(attribute)
                     name = attribute["Name"].replace(" ", "")
                     lower_first_letter = name[0].lower() + name[1:]
-                    if (packetName == "MotorFaults"):
-                        file.write("{type} {packetName}Data::get{name}() const\n{{\n".format(type = type,packetName=packetName,name = name))
-                        file.write("\treturn {lower_first_letter}_;\n".format(type=type,lower_first_letter=lower_first_letter))
-                    else:
-                        file.write("{type} {packetName}Data::get{name}() const\n{{\n".format(type = type,packetName=packetName,name = name))
-                        file.write("\treturn static_cast<{type}>({lower_first_letter}_);\n".format(type=type,lower_first_letter=lower_first_letter))
+                    file.write("{type} {packetName}Data::get{name}() const\n{{\n".format(type = type,packetName=packetName,name = name))
+                    file.write("\treturn static_cast<{type}>({lower_first_letter}_);\n".format(type=type,lower_first_letter=lower_first_letter))
                     file.write("}\n")
                 # Write Setter
                 for attribute in packetData:
