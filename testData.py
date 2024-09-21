@@ -192,59 +192,59 @@ data =[
     },
     ]
 },
-# {"BatteryFaults":[
-#     {
-#     "Name": "Error Flags",
-#     "Offset": 1,
-#     "Type": "uint",
-#     "Unit": "bitflag",
-#     "detail": [
-#         {"0x00000001": "Internal Communication Fault"},
-#         {"0x00000002": "Internal Conversion Fault"},
-#         {"0x00000004": "Weak Cell Fault"},
-#         {"0x00000008": "Low Cell Voltage Fault"},
-#         {"0x00000010": "Open Wiring Fault"},
-#         {"0x00000020": "Current Sensor Fault"},
-#         {"0x00000040": "Pack Voltage Sensor Fault"},
-#         {"0x00000080": "Weak Pack Fault"},
-#         {"0x00000100": "Voltage Redundancy Fault"},
-#         {"0x00000200": "Fan Monitor Fault"},
-#         {"0x00000400": "Thermistor Fault"},
-#         {"0x00000800": "Canbus Communications Fault"},
-#         {"0x00001000": "Always On Supply Fault"},
-#         {"0x00002000": "High Voltage Isolation Fault"},
-#         {"0x00004000": "Power Supply 12V Fault"},
-#         {"0x00008000": "Charge Limit Enforcement Fault"},
-#         {"0x00010000": "Discharge Limit Enforcement Fault"},
-#         {"0x00020000": "Charger Safety Relay Fault"},
-#         {"0x00040000": "Internal Memory Fault"},
-#         {"0x00080000": "Internal Thermistor Fault"},
-#         {"0x00100000": "Internal Logic Fault"}
-#     ]
-# },
-# {
-#     "Name": "Limit Flags",
-#     "Offset": 4,
-#     "Type": "short uint",
-#     "Unit": "bitflag",
-#     "detail": [
-#         {"0x0001": "Dcl Reduced Due To Low Soc"},
-#         {"0x0002": "Dcl Reduced Due To High Cell Resistence"},
-#         {"0x0004": "Dcl Reduced Due To Temperature"},
-#         {"0x0008": "Dcl Reduced Due To Low Cell Voltage"},
-#         {"0x0010": "Dcl Reduced Due To Low Pack Voltage"},
-#         {"0x0040": "Dcl And Ccl Reduced Due To Voltage Failsafe"},
-#         {"0x0080": "Dcl And Ccl Reduced Due To Communication Failsafe"},
-#         {"0x0200": "Ccl Reduced Due To High Soc"},
-#         {"0x0400": "Ccl Reduced Due To High Cell Resistence"},
-#         {"0x0800": "Ccl Reduced Due To Temperature"},
-#         {"0x1000": "Ccl Reduced Due To High Cell Voltage"},
-#         {"0x2000": "Ccl Reduced Due To High Pack Voltage"},
-#         {"0x4000": "Ccl Reduced Due To Charger Latch"},
-#         {"0x8000": "Ccl Reduced Due To Alternate Current Limit"}
-#     ]
-# }
-# ]},
+{"BatteryFaults":[
+    {
+    "Name": "Error Flags",
+    "Offset": 1,
+    "Type": "uint",
+    "Unit": "bitflag",
+    "detail": [
+        {"0x00000001": "Internal Communication Fault"},
+        {"0x00000002": "Internal Conversion Fault"},
+        {"0x00000004": "Weak Cell Fault"},
+        {"0x00000008": "Low Cell Voltage Fault"},
+        {"0x00000010": "Open Wiring Fault"},
+        {"0x00000020": "Current Sensor Fault"},
+        {"0x00000040": "Pack Voltage Sensor Fault"},
+        {"0x00000080": "Weak Pack Fault"},
+        {"0x00000100": "Voltage Redundancy Fault"},
+        {"0x00000200": "Fan Monitor Fault"},
+        {"0x00000400": "Thermistor Fault"},
+        {"0x00000800": "Canbus Communications Fault"},
+        {"0x00001000": "Always On Supply Fault"},
+        {"0x00002000": "High Voltage Isolation Fault"},
+        {"0x00004000": "Power Supply 12V Fault"},
+        {"0x00008000": "Charge Limit Enforcement Fault"},
+        {"0x00010000": "Discharge Limit Enforcement Fault"},
+        {"0x00020000": "Charger Safety Relay Fault"},
+        {"0x00040000": "Internal Memory Fault"},
+        {"0x00080000": "Internal Thermistor Fault"},
+        {"0x00100000": "Internal Logic Fault"}
+    ],"enum":{}
+},
+{
+    "Name": "Limit Flags",
+    "Offset": 4,
+    "Type": "short uint",
+    "Unit": "bitflag",
+    "detail": [
+        {"0x0001": "Dcl Reduced Due To Low Soc"},
+        {"0x0002": "Dcl Reduced Due To High Cell Resistence"},
+        {"0x0004": "Dcl Reduced Due To Temperature"},
+        {"0x0008": "Dcl Reduced Due To Low Cell Voltage"},
+        {"0x0010": "Dcl Reduced Due To Low Pack Voltage"},
+        {"0x0040": "Dcl And Ccl Reduced Due To Voltage Failsafe"},
+        {"0x0080": "Dcl And Ccl Reduced Due To Communication Failsafe"},
+        {"0x0200": "Ccl Reduced Due To High Soc"},
+        {"0x0400": "Ccl Reduced Due To High Cell Resistence"},
+        {"0x0800": "Ccl Reduced Due To Temperature"},
+        {"0x1000": "Ccl Reduced Due To High Cell Voltage"},
+        {"0x2000": "Ccl Reduced Due To High Pack Voltage"},
+        {"0x4000": "Ccl Reduced Due To Charger Latch"},
+        {"0x8000": "Ccl Reduced Due To Alternate Current Limit"}
+    ],"enum":{}
+}
+]},
 #  {
 #     "Lights":
 #     [

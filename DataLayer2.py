@@ -190,12 +190,6 @@ class DataLayer:
                     name = attribute["Name"].replace(" ", "")
                     lower_first_letter = name[0].lower() + name[1:]
                     file.write("\t {type} {name}_;\n".format(type = type, name = lower_first_letter))
-                # BatteryFaults do not include these methods in CSV, so for now its hard coded. Need to think how to handle it. 
-                if(packetName == "BatteryFaults"):
-                        file.write("\t inline bool errorFlagPresent(const unsigned int errorMask) const;\n")
-                        file.write("\t inline bool limitFlagPresent(const unsigned short limitMask) const;\n")
-                        file.write("\t inline void appendIfPresent(QString& messageString, const unsigned int errorMask, QString errorDescription) const;\n")
-                        file.write("\t inline void appendIfPresent(QString& messageString, const unsigned short limitMask, QString limitDescription) const;\n ")
                 file.write("\n")
                 file.write("};")
 
@@ -213,7 +207,6 @@ class DataLayer:
                 file.write('#include "{packetName}Data.h"\n'.format(packetName = packetName))
                 file.write("namespace\n{")
                 # Write Namespace
-                # Name space for motorFaults
                 self.nameSpaceGenerator(packetName,packetData,file)
                 file.write("}\n")
                 # write constructor
@@ -232,16 +225,6 @@ class DataLayer:
                 # Write Deconstructor
                 file.write("\n{packetName}Data::~{packetName}Data(){{}}\n".format(packetName=packetName))
                 # Write Getters
-                  # Special case for BatteryFaults due to these methods not being present in CSV DISCUSSION ON HOW TO GO ABOUT THIS
-                if (packetName == "BatteryFaults"):
-                    file.write("bool BatteryFaultsData::errorFlagPresent(const unsigned int errorMask) const\n"
-                                "{\n"
-                                "\treturn static_cast<bool>(errorFlags_ & errorMask);\n"
-                                "}\n\n"
-                                "bool BatteryFaultsData::limitFlagPresent(const unsigned short limitMask) const\n"
-                                "{\n"
-                                "\treturn static_cast<bool>(limitFlags_ & limitMask);\n"
-                                "}\n")
                 for attribute in packetData:
                     if(attribute["Name"] == "PackageID"):
                         continue
