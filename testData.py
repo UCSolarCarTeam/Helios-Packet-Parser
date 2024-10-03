@@ -1,7 +1,7 @@
 data =[
     {
         "DriverControls": [
-            {"Name": "PackageID", "Offset": 0, "Type": "uchar", "Unit": "", "detail": "ID=4","enum":{}},
+            {"Name": "PackageID", "Offset": 0, "Type": "uchar", "Unit": "", "detail":{"isUnit":False},"enum":{}},
             {"Name": "DriverControlsBoardAlive", "Offset":1, "Type":"uchar", "Unit":"boolean","detail":"","enum":{}},
             {"Name": "LightsInputs", "Offset":2, "Type":"uchar", "Unit":"bitflag", "detail": [  { "0x01": "Headlights Off" },
   { "0x02": "Headlights Low" },
@@ -28,6 +28,7 @@ data =[
     },
     {
     "MotorFaults": [
+        {"Name": "PackageID", "Offset": 0, "Type": "uchar", "Unit": "", "detail":{"isUnit":False},"enum":{}},
         {"Name": "M0 Error Flags", "Offset": 1, "Type": "uchar", "Unit": "bitflag", "detail": [
             {"0x01": "Motor Over Speed"},
             {"0x02": "Software Over Current"},
@@ -72,7 +73,29 @@ data =[
         {"Name": "M1 Can Tx Error Count", "Offset": 8, "Type": "uchar", "Unit": "#", "detail": "","enum":{}}
     ]
 },
+{
+  "MotorDetails": [
+    {"Name": "PackageID", "Offset": 0, "Type": "uchar", "Unit": "", "detail": {"isUnit": True}, "enum": {}},
+    {"Name": "Phase C Current", "Offset": 1, "Type": "float", "Unit": "A(rms)", "detail": "", "enum": {}},
+    {"Name": "Phase B Current", "Offset": 5, "Type": "float", "Unit": "A(rms)", "detail": "", "enum": {}},
+    {"Name": "Motor Voltage Real", "Offset": 9, "Type": "float", "Unit": "V", "detail": "", "enum": {}},
+    {"Name": "Motor Voltage Imaginary", "Offset": 13, "Type": "float", "Unit": "V", "detail": "", "enum": {}},
+    {"Name": "Motor Current Real", "Offset": 17, "Type": "float", "Unit": "A", "detail": "", "enum": {}},
+    {"Name": "Motor Current Imaginary", "Offset": 21, "Type": "float", "Unit": "A", "detail": "", "enum": {}},
+    {"Name": "Back Emf", "Offset": 25, "Type": "float", "Unit": "V", "detail": "", "enum": {}},
+    {"Name": "Voltage Rail Supply 15V", "Offset": 29, "Type": "float", "Unit": "V", "detail": "", "enum": {}},
+    {"Name": "Voltage Rail Supply 33V", "Offset": 33, "Type": "float", "Unit": "V", "detail": "", "enum": {}},
+    {"Name": "Voltage Rail Supply 19V ", "Offset": 37, "Type": "float", "Unit": "V", "detail": "", "enum": {}},
+    {"Name": "Heat Sink Temperature", "Offset": 41, "Type": "float", "Unit": "°C", "detail": "", "enum": {}},
+    {"Name": "Motor Temperature", "Offset": 45, "Type": "float", "Unit": "°C", "detail": "", "enum": {}},
+    {"Name": "Dsp Board Temperature", "Offset": 49, "Type": "float", "Unit": "°C", "detail": "", "enum": {}},
+    {"Name": "Dc Bus AmpHours", "Offset": 53, "Type": "float", "Unit": "Ah", "detail": "", "enum": {}},
+    {"Name": "Odometer", "Offset": 57, "Type": "float", "Unit": "m", "detail": "", "enum": {}},
+    {"Name": "Slip Speed", "Offset": 61, "Type": "float", "Unit": "Hz", "detail": "", "enum": {}}
+  ]
+},
 {"AuxBms":[
+    {"Name": "PackageID", "Offset": 0, "Type": "uchar", "Unit": "", "detail":{"isUnit":False},"enum":{}},
     {
     "Name": "PackageID",
     "Offset": 0,
@@ -193,6 +216,7 @@ data =[
     ]
 },
 {"BatteryFaults":[
+    {"Name": "PackageID", "Offset": 0, "Type": "uchar", "Unit": "", "detail":{"isUnit":False},"enum":{}},
     {
     "Name": "Error Flags",
     "Offset": 1,
