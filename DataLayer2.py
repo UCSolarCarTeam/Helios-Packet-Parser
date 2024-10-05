@@ -74,14 +74,14 @@ class DataLayer:
         with open(filePath, "w") as file:
             file.write("#pragma once\n")
             file.write('#include "../qtMethods.h"\n')
-            file.write('#include I_{packetName}Unit.h\n'.format(packetName = packetName)) 
+            file.write('#include "I_{packetName}Unit.h"\n'.format(packetName = packetName)) 
             file.write("class I_{packetName}Data:public QObject \n{{\nQ_OBJECT\n".format(packetName=packetName))
             file.write("public:\n")  
             # Deconstructor
             file.write("\tvirtual ~I_{packetName}Data() {{}};\n".format(packetName=packetName))
             # Standard 2 getters among multiple unit data packet.
-            file.write("\tvirtual unsigned char getNumberofUnits() const = 0;\n")
-            file.write("\tvirtual I_{packetName}Unit& getMpptUnit(const unsigned char & index) const = 0;".format(packetName=packetName))
+            file.write("\tvirtual unsigned char getNumberOfUnits() const = 0;\n")
+            file.write("\tvirtual I_{packetName}Unit& get{packetName}Unit(const unsigned char & index) const = 0;".format(packetName=packetName))
             # Closing class off
             file.write("\n")
             file.write("};")
@@ -198,72 +198,104 @@ class DataLayer:
                         file.write("\tvirtual void set{name}(const {type}& get{name}) = 0;\n".format(type = type, name = name))
                     file.write("\n")
                     file.write("\n};")
-
+    def generateHeaderMultipleUnits(self,packet):
+        packetName = list(packet.keys())[0]
+        packetData = packet[packetName]
+        # Make the folder Name
+        dataFolderNamePath = os.path.join(self.new_directory_path,packetName+"Data")
+        os.makedirs(dataFolderNamePath,exist_ok=True)
+        # Make the data interface file
+        headerFileName = "{packetName}Data.h".format(packetName=packetName)
+        filePath = os.path.join(dataFolderNamePath,headerFileName)
+        with open(filePath, "w") as file:
+            file.write("#pragma once\n")
+            file.write('#include "../qtMethods.h"\n')
+            file.write('#include "I_{packetName}Data.h"\n'.format(packetName=packetName))
+            file.write('#include "{packetName}Unit.h"\n'.format(packetName = packetName)) 
+            file.write("class {packetName}Data:public I_{packetName}Data \n{{\nQ_OBJECT\n".format(packetName=packetName))
+            file.write("public:\n")  
+            # Constructor
+            file.write("\t{packetName}Data(QList<I_{packetName}Unit*>units);\n".format(packetName=packetName))
+             # Standard 2 getters among multiple unit data packet.
+            file.write("\tunsigned char getNumberOfUnits() const;\n")
+            file.write("\tI_{packetName}Unit& get{packetName}Unit(const unsigned char& index) const;\n".format(packetName=packetName))
+            # Private Method:
+            file.write("private:\n")
+            editedPacketName = packetName[:1].lower() + packetName [1:]
+            file.write("\tQList<I_{packetName}Unit*> {editedPacketName}Units_;\n".format(packetName=packetName,editedPacketName=editedPacketName))
+            # Closing class off
+            file.write("\n")
+            file.write("};")
+            file.close()
     def generateHeader(self):
         for packet in self.parsedData:
             packetName = list(packet.keys())[0]
             packetData = packet[packetName]
+             # Generate multiple data layout
+            if(packetData[0]["detail"]["isUnit"]) == True:
+                self.generateHeaderMultipleUnits(packet)
             # Make the folder Name
-            dataFolderNamePath = os.path.join(self.new_directory_path,packetName+"Data")
-            os.makedirs(dataFolderNamePath,exist_ok=True)
-            # Make the header file
-            headerFileName = "{packetName}Data.h".format(packetName=packetName)
-            filePath = os.path.join(dataFolderNamePath,headerFileName)
-            # Create a file to write to
-            with open(filePath, "w") as file:
-                file.write("#pragma once\n")
-                file.write('#include "I_{packetName}Data.h"\n'.format(packetName = packetName))
-                file.write("class {packetName}Data:public I_{packetName}Data \n{{\n".format(packetName=packetName))
-                file.write("public:\n")
-                # Write Constructor
-                file.write("\t{packetName}Data();\n".format(packetName = packetName))
-                # Write Deconstructor
-                file.write("\tvirtual ~{packetName}Data();\n".format(packetName=packetName))
-                # Special Case for MotorFaults as they need QString, CONSIDERATION - write QString for all files, but only implement for what needs it?
-                if (packetName == "MotorFaults" or packetName == "BatteryFaults"):
-                    file.write("\tQString toString() const;\n")
-                # Write the Getter Methods
-                for attribute in packetData:
-                    # Skip Package ID
-                    if(attribute["Name"] == "PackageID"):
-                        continue
-                    # if bit flag unit, needs to make setter and getter for details list.
-                    if(attribute["Unit"] == "bitflag"):
-                        # iterate through detail
-                        for item in attribute["detail"]:
-                            motorNum = ""
-                            value = list(item.values())[0] 
-                            noSpaceString = value.lstrip().replace(" ", "")
-                            # If we are packaging motor related data, need to get motor number.
-                            if (packetName == "MotorFaults"):
-                                # Get motor number
-                                motorNum = attribute["Name"][:2]
-                            file.write("\t bool get{motorNum}{noSpaceString}() const;\n".format(motorNum = motorNum,noSpaceString = noSpaceString))
-                    # Determine Type of Data
-                    type = self.determineType(attribute)
-                    name = attribute["Name"].replace(" ", "")
-                    file.write("\t {type} get{name}() const;\n".format(type = type, name = name))
-                # Write out the Setter methods
-                for attribute in packetData:
-                    if(attribute["Name"] == "PackageID"):
-                        continue
-                    # Determining the type for data
-                    type = self.determineType(attribute)
-                    name = attribute["Name"].replace(" ", "")
-                    file.write("\t void set{name}(const {type}& get{name});\n".format(type = type, name = name))
-                # Writing out the variables
-                file.write("private:\n")
-                for attribute in packetData:
-                    # Skip PackageID
-                    if(attribute["Name"] == "PackageID"):
-                        continue
-                    # Determine Data Type
-                    type = self.determineType(attribute)
-                    name = attribute["Name"].replace(" ", "")
-                    lower_first_letter = name[0].lower() + name[1:]
-                    file.write("\t {type} {name}_;\n".format(type = type, name = lower_first_letter))
-                file.write("\n")
-                file.write("};")
+            else:
+                dataFolderNamePath = os.path.join(self.new_directory_path,packetName+"Data")
+                os.makedirs(dataFolderNamePath,exist_ok=True)
+                # Make the header file
+                headerFileName = "{packetName}Data.h".format(packetName=packetName)
+                filePath = os.path.join(dataFolderNamePath,headerFileName)
+                # Create a file to write to
+                with open(filePath, "w") as file:
+                    file.write("#pragma once\n")
+                    file.write('#include "I_{packetName}Data.h"\n'.format(packetName = packetName))
+                    file.write("class {packetName}Data:public I_{packetName}Data \n{{\n".format(packetName=packetName))
+                    file.write("public:\n")
+                    # Write Constructor
+                    file.write("\t{packetName}Data();\n".format(packetName = packetName))
+                    # Write Deconstructor
+                    file.write("\tvirtual ~{packetName}Data();\n".format(packetName=packetName))
+                    # Special Case for MotorFaults as they need QString, CONSIDERATION - write QString for all files, but only implement for what needs it?
+                    if (packetName == "MotorFaults" or packetName == "BatteryFaults"):
+                        file.write("\tQString toString() const;\n")
+                    # Write the Getter Methods
+                    for attribute in packetData:
+                        # Skip Package ID
+                        if(attribute["Name"] == "PackageID"):
+                            continue
+                        # if bit flag unit, needs to make setter and getter for details list.
+                        if(attribute["Unit"] == "bitflag"):
+                            # iterate through detail
+                            for item in attribute["detail"]:
+                                motorNum = ""
+                                value = list(item.values())[0] 
+                                noSpaceString = value.lstrip().replace(" ", "")
+                                # If we are packaging motor related data, need to get motor number.
+                                if (packetName == "MotorFaults"):
+                                    # Get motor number
+                                    motorNum = attribute["Name"][:2]
+                                file.write("\t bool get{motorNum}{noSpaceString}() const;\n".format(motorNum = motorNum,noSpaceString = noSpaceString))
+                        # Determine Type of Data
+                        type = self.determineType(attribute)
+                        name = attribute["Name"].replace(" ", "")
+                        file.write("\t {type} get{name}() const;\n".format(type = type, name = name))
+                    # Write out the Setter methods
+                    for attribute in packetData:
+                        if(attribute["Name"] == "PackageID"):
+                            continue
+                        # Determining the type for data
+                        type = self.determineType(attribute)
+                        name = attribute["Name"].replace(" ", "")
+                        file.write("\t void set{name}(const {type}& get{name});\n".format(type = type, name = name))
+                    # Writing out the variables
+                    file.write("private:\n")
+                    for attribute in packetData:
+                        # Skip PackageID
+                        if(attribute["Name"] == "PackageID"):
+                            continue
+                        # Determine Data Type
+                        type = self.determineType(attribute)
+                        name = attribute["Name"].replace(" ", "")
+                        lower_first_letter = name[0].lower() + name[1:]
+                        file.write("\t {type} {name}_;\n".format(type = type, name = lower_first_letter))
+                    file.write("\n")
+                    file.write("};")
 
     def genCppFile(self):
         for packet in self.parsedData:
