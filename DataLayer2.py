@@ -204,7 +204,7 @@ class DataLayer:
         # Make the folder Name
         dataFolderNamePath = os.path.join(self.new_directory_path,packetName+"Data")
         os.makedirs(dataFolderNamePath,exist_ok=True)
-        # Make the data interface file
+        # Make the data header file
         headerFileName = "{packetName}Data.h".format(packetName=packetName)
         filePath = os.path.join(dataFolderNamePath,headerFileName)
         with open(filePath, "w") as file:
@@ -227,6 +227,64 @@ class DataLayer:
             file.write("\n")
             file.write("};")
             file.close()
+        # Make Unit header file
+        headerFileName = "{packetName}Unit.h".format(packetName=packetName)
+        filePath = os.path.join(dataFolderNamePath,headerFileName)
+        # Create a file to write to
+        with open(filePath, "w") as file:
+                    file.write("#pragma once\n")
+                    file.write('#include "I_{packetName}Unit.h"\n'.format(packetName = packetName))
+                    file.write("class {packetName}Unit:public I_{packetName}Unit \n{{\n".format(packetName=packetName))
+                    file.write("public:\n")
+                    # Write Constructor
+                    file.write("\t{packetName}Unit();\n".format(packetName = packetName))
+                    # Write Deconstructor
+                    file.write("\t~{packetName}Unit();\n".format(packetName = packetName))
+                     # Write the Getter Methods
+                    for attribute in packetData:
+                        # Skip Package ID
+                        if(attribute["Name"] == "PackageID"):
+                            continue
+                        # if bit flag unit, needs to make setter and getter for details list.
+                        if(attribute["Unit"] == "bitflag"):
+                            # iterate through detail
+                            for item in attribute["detail"]:
+                                motorNum = ""
+                                value = list(item.values())[0] 
+                                noSpaceString = value.lstrip().replace(" ", "")
+                                # If we are packaging motor related data, need to get motor number.
+                                if (packetName == "MotorFaults"):
+                                    # Get motor number
+                                    motorNum = attribute["Name"][:2]
+                                file.write("\t bool get{motorNum}{noSpaceString}() const;\n".format(motorNum = motorNum,noSpaceString = noSpaceString))
+                                                # Determine Type of Data
+                        type = self.determineType(attribute)
+                        name = attribute["Name"].replace(" ", "")
+                        file.write("\t {type} get{name}() const;\n".format(type = type, name = name))
+                    # Write out the Setter methods
+                    for attribute in packetData:
+                        if(attribute["Name"] == "PackageID"):
+                            continue
+                        # Determining the type for data
+                        type = self.determineType(attribute)
+                        name = attribute["Name"].replace(" ", "")
+                        file.write("\t void set{name}(const {type}& get{name});\n".format(type = type, name = name))
+                    # Writing out the variables
+                    file.write("private:\n")
+                    if packetName == "MotorDetails":
+                        # REVIST
+                        file.write("\tstatic unsigned char newMotorNumber_;\n")
+                    for attribute in packetData:
+                        # Skip PackageID
+                        if(attribute["Name"] == "PackageID"):
+                            continue
+                        # Determine Data Type
+                        type = self.determineType(attribute)
+                        name = attribute["Name"].replace(" ", "")
+                        lower_first_letter = name[0].lower() + name[1:]
+                        file.write("\t {type} {name}_;\n".format(type = type, name = lower_first_letter))
+                    file.write("\n")
+                    file.write("};")
     def generateHeader(self):
         for packet in self.parsedData:
             packetName = list(packet.keys())[0]

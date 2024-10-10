@@ -76,6 +76,7 @@ data =[
 {
   "MotorDetails": [
     {"Name": "PackageID", "Offset": 0, "Type": "uchar", "Unit": "", "detail": {"isUnit": True}, "enum": {}},
+    {"Name": "Motor Number", "Offset": 0, "Type": "uchar", "Unit": "", "detail":"", "enum": {}},
     {"Name": "Phase C Current", "Offset": 1, "Type": "float", "Unit": "A(rms)", "detail": "", "enum": {}},
     {"Name": "Phase B Current", "Offset": 5, "Type": "float", "Unit": "A(rms)", "detail": "", "enum": {}},
     {"Name": "Motor Voltage Real", "Offset": 9, "Type": "float", "Unit": "V", "detail": "", "enum": {}},
