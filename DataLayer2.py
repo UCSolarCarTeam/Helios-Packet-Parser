@@ -354,85 +354,174 @@ class DataLayer:
                         file.write("\t {type} {name}_;\n".format(type = type, name = lower_first_letter))
                     file.write("\n")
                     file.write("};")
-
+    def genCppForMultiUnits(self,packet):
+        packetName = list(packet.keys())[0]
+        lowerPacketName = packetName[0].lower() + packetName[1:]
+        packetData = packet[packetName]
+        # Make the folder Name
+        dataFolderNamePath = os.path.join(self.new_directory_path,packetName+"Data")
+        os.makedirs(dataFolderNamePath,exist_ok=True)
+        # Make the data CPP file
+        headerFileName = "{packetName}Data.cpp".format(packetName=packetName)
+        filePath = os.path.join(dataFolderNamePath,headerFileName)
+        with open(filePath, "w") as file:
+            file.write('#include "{packetName}Data.h"\n'.format(packetName=packetName))
+            file.write('#include "{packetName}Unit.h"\n'.format(packetName=packetName))
+            file.write("{packetName}Data::{packetName}Data(QList<I_{packetName}Unit*> units)\n : {lowerPacketName}Units_(units)\n {{}}\n".format(packetName=packetName,lowerPacketName=lowerPacketName))
+            file.write("unsigned char {packetName}Data::getNumberOfUnits() const \n {{ \n \t return {lowerPacketName}Units_.length();\n }}\n".format(lowerPacketName=lowerPacketName,packetName=packetName))
+            file.write("I_{packetName}Unit& {packetName}Data::get{packetName}Unit(const unsigned char& index) const\n {{ \n \treturn *{lowerPacketName}Units_[static_cast<int>(index)]; \n }}".format(packetName=packetName, lowerPacketName=lowerPacketName))
+        # Make Unit CPP file
+        headerFileName = "{packetName}Unit.cpp".format(packetName=packetName)
+        filePath = os.path.join(dataFolderNamePath,headerFileName)
+        # Create a file to write to
+        with open(filePath, "w") as file:
+            file.write('#include "{packetName}Unit.h"\n'.format(packetName = packetName))
+            if packetName == "MotorDetails":
+                    # REVIST
+                    file.write("unsigned char MotorDetailsUnit::newMotorNumber_=0;\n")
+            # write constructor
+            file.write("{packetName}Unit::{packetName}Unit():\n\t".format(packetName=packetName))
+            for i, attribute in enumerate(packetData):
+                # Skip PackageID
+                if attribute["Name"] == "PackageID":
+                        continue
+                name = attribute["Name"].replace(" ", "")
+                lower_first_letter = name[0].lower() + name[1:]
+                if i == len(packetData) - 1:
+                    file.write("{name}_(0)\n\t".format(name=lower_first_letter))
+                else:
+                    file.write("{name}_(0)\n\t,".format(name=lower_first_letter))
+            file.write("\n{\n")
+            # DISCUSS THIS
+            if packetName == "MotorDetails":
+                file.write("\t motorNumber_ = newMotorNumber_++;\n")
+            file.write("}")
+            # Write Deconstructor
+            file.write("\n{packetName}Unit::~{packetName}Unit(){{}}\n".format(packetName=packetName))
+            # Write Getters
+            for attribute in packetData:
+                if(attribute["Name"] == "PackageID"):
+                    continue
+                # if bit flag unit, needs to make setter and getter for details.
+                if(attribute["Unit"] == "bitflag"):
+                    # iterate through detail
+                    for item in attribute["detail"]:
+                        value = list(item.values())[0] 
+                        editedString = value.lstrip().replace(" ", "_").upper()
+                        noSpaceString = value.lstrip().replace(" ", "")
+                        name = attribute["Name"].replace(" ", "")
+                        lower_first_letter = name[0].lower() + name[1:]
+                        motorNum=""
+                        # Write getter
+                        if (packetName == "MotorFaults"):
+                            # Get motor number
+                            motorNum = attribute["Name"][:2]
+                        file.write("bool {packetName}Unit::get{motorNum}{name}() const\n{{\n".format(type = type,packetName=packetName,name = noSpaceString, motorNum=motorNum))
+                        file.write("\treturn static_cast<bool>({lower_first_letter}_ & {editedString}_OFFSET);\n".format(type=type,lower_first_letter=lower_first_letter,editedString=editedString))
+                        file.write("}\n")
+                value = list(attribute.values())[0] 
+                noSpaceString = value.lstrip().replace(" ", "")
+                type = self.determineType(attribute)
+                name = attribute["Name"].replace(" ", "")
+                lower_first_letter = name[0].lower() + name[1:]
+                file.write("{type} {packetName}Unit::get{name}() const\n{{\n".format(type = type,packetName=packetName,name = name))
+                file.write("\treturn static_cast<{type}>({lower_first_letter}_);\n".format(type=type,lower_first_letter=lower_first_letter))
+                file.write("}\n")
+            # Write Setter
+            for attribute in packetData:
+                # Skip PackageID
+                if(attribute["Name"] == "PackageID"):
+                    continue
+                value = list(attribute.values())[0] 
+                noSpaceString = value.lstrip().replace(" ", "")
+                # Determine Data Type
+                type = self.determineType(attribute)
+                name = attribute["Name"].replace(" ", "")
+                lower_first_letter = name[0].lower() + name[1:]
+                file.write("void {packetName}Unit::set{name}(const {type}& {lower_first_letter})\n{{\n".format(type = type,packetName=packetName,name = name, lower_first_letter=lower_first_letter))
+                file.write("\t{name}_  =  {name};\n".format(name=lower_first_letter))
+                file.write("}\n")
     def genCppFile(self):
-        for packet in self.parsedData:
+        for packet in self.parsedData: 
             packetName = list(packet.keys())[0]
             packetData = packet[packetName]
-            # Make the folder Name
-            dataFolderNamePath = os.path.join(self.new_directory_path,packetName+"Data")
-            os.makedirs(dataFolderNamePath,exist_ok=True)
-            # Make the CPP file
-            cppFileName = "{packetName}Data.cpp".format(packetName=packetName)
-            filePath = os.path.join(dataFolderNamePath,cppFileName)
-            with open(filePath, "w") as file:
-                file.write('#include "{packetName}Data.h"\n'.format(packetName = packetName))
-                file.write("namespace\n{")
-                # Write Namespace
-                self.nameSpaceGenerator(packetName,packetData,file)
-                file.write("}\n")
-                # write constructor
-                file.write("{packetName}Data::{packetName}Data():\n\t".format(packetName=packetName))
-                for i, attribute in enumerate(packetData):
-                    # Skip PackageID
-                    if attribute["Name"] == "PackageID":
+            if(packetData[0]["detail"]["isUnit"]) == True:
+                self.genCppForMultiUnits(packet)
+            else:
+                # Make the folder Name
+                dataFolderNamePath = os.path.join(self.new_directory_path,packetName+"Data")
+                os.makedirs(dataFolderNamePath,exist_ok=True)
+                # Make the CPP file
+                cppFileName = "{packetName}Data.cpp".format(packetName=packetName)
+                filePath = os.path.join(dataFolderNamePath,cppFileName)
+                with open(filePath, "w") as file:
+                    file.write('#include "{packetName}Data.h"\n'.format(packetName = packetName))
+                    file.write("namespace\n{")
+                    # Write Namespace
+                    self.nameSpaceGenerator(packetName,packetData,file)
+                    file.write("}\n")
+                    # write constructor
+                    file.write("{packetName}Data::{packetName}Data():\n\t".format(packetName=packetName))
+                    for i, attribute in enumerate(packetData):
+                        # Skip PackageID
+                        if attribute["Name"] == "PackageID":
+                                continue
+                        name = attribute["Name"].replace(" ", "")
+                        lower_first_letter = name[0].lower() + name[1:]
+                        if i == len(packetData) - 1:
+                            file.write("{name}_(0)\n\t".format(name=lower_first_letter))
+                        else:
+                            file.write("{name}_(0)\n\t,".format(name=lower_first_letter))
+                    file.write("\n{}")
+                    # Write Deconstructor
+                    file.write("\n{packetName}Data::~{packetName}Data(){{}}\n".format(packetName=packetName))
+                    # Write Getters
+                    for attribute in packetData:
+                        if(attribute["Name"] == "PackageID"):
                             continue
-                    name = attribute["Name"].replace(" ", "")
-                    lower_first_letter = name[0].lower() + name[1:]
-                    if i == len(packetData) - 1:
-                        file.write("{name}_(0)\n\t".format(name=lower_first_letter))
-                    else:
-                        file.write("{name}_(0)\n\t,".format(name=lower_first_letter))
-                file.write("\n{}")
-                # Write Deconstructor
-                file.write("\n{packetName}Data::~{packetName}Data(){{}}\n".format(packetName=packetName))
-                # Write Getters
-                for attribute in packetData:
-                    if(attribute["Name"] == "PackageID"):
-                        continue
-                    # if bit flag unit, needs to make setter and getter for details.
-                    if(attribute["Unit"] == "bitflag"):
-                        # iterate through detail
-                        for item in attribute["detail"]:
-                            value = list(item.values())[0] 
-                            editedString = value.lstrip().replace(" ", "_").upper()
-                            noSpaceString = value.lstrip().replace(" ", "")
-                            name = attribute["Name"].replace(" ", "")
-                            lower_first_letter = name[0].lower() + name[1:]
-                            motorNum=""
-                            # Write getter
-                            if (packetName == "MotorFaults"):
-                                # Get motor number
-                                motorNum = attribute["Name"][:2]
-                            file.write("bool {packetName}Data::get{motorNum}{name}() const\n{{\n".format(type = type,packetName=packetName,name = noSpaceString, motorNum=motorNum))
-                            file.write("\treturn static_cast<bool>({lower_first_letter}_ & {editedString}_OFFSET);\n".format(type=type,lower_first_letter=lower_first_letter,editedString=editedString))
-                            file.write("}\n")
-                    value = list(attribute.values())[0] 
-                    noSpaceString = value.lstrip().replace(" ", "")
-                    type = self.determineType(attribute)
-                    name = attribute["Name"].replace(" ", "")
-                    lower_first_letter = name[0].lower() + name[1:]
-                    file.write("{type} {packetName}Data::get{name}() const\n{{\n".format(type = type,packetName=packetName,name = name))
-                    file.write("\treturn static_cast<{type}>({lower_first_letter}_);\n".format(type=type,lower_first_letter=lower_first_letter))
-                    file.write("}\n")
-                # Write Setter
-                for attribute in packetData:
-                    # Skip PackageID
-                    if(attribute["Name"] == "PackageID"):
-                        continue
-                    value = list(item.values())[0] 
-                    noSpaceString = value.lstrip().replace(" ", "")
-                    # Determine Data Type
-                    type = self.determineType(attribute)
-                    name = attribute["Name"].replace(" ", "")
-                    lower_first_letter = name[0].lower() + name[1:]
-                    file.write("void {packetName}Data::set{name}(const {type}& {lower_first_letter})\n{{\n".format(type = type,packetName=packetName,name = name, lower_first_letter=lower_first_letter))
-                    file.write("\t{name}_  =  {name};\n".format(name=lower_first_letter))
-                    file.write("}\n")
-                if (packetName == "MotorFaults"):
-                    file.write("QString MotorFaultsData::toString() const\n{\n")
-                    file.write('\treturn "0x" + QString::number(m0ErrorFlags_, 16) + " 0x" + QString::number(m0LimitFlags_, 16) + " 0x" + QString::number(m1ErrorFlags_, 16) + " 0x" + QString::number(m1LimitFlags_, 16);\n}')
-              
+                        # if bit flag unit, needs to make setter and getter for details.
+                        if(attribute["Unit"] == "bitflag"):
+                            # iterate through detail
+                            for item in attribute["detail"]:
+                                value = list(item.values())[0] 
+                                editedString = value.lstrip().replace(" ", "_").upper()
+                                noSpaceString = value.lstrip().replace(" ", "")
+                                name = attribute["Name"].replace(" ", "")
+                                lower_first_letter = name[0].lower() + name[1:]
+                                motorNum=""
+                                # Write getter
+                                if (packetName == "MotorFaults"):
+                                    # Get motor number
+                                    motorNum = attribute["Name"][:2]
+                                file.write("bool {packetName}Data::get{motorNum}{name}() const\n{{\n".format(type = type,packetName=packetName,name = noSpaceString, motorNum=motorNum))
+                                file.write("\treturn static_cast<bool>({lower_first_letter}_ & {editedString}_OFFSET);\n".format(type=type,lower_first_letter=lower_first_letter,editedString=editedString))
+                                file.write("}\n")
+                        value = list(attribute.values())[0] 
+                        noSpaceString = value.lstrip().replace(" ", "")
+                        type = self.determineType(attribute)
+                        name = attribute["Name"].replace(" ", "")
+                        lower_first_letter = name[0].lower() + name[1:]
+                        file.write("{type} {packetName}Data::get{name}() const\n{{\n".format(type = type,packetName=packetName,name = name))
+                        file.write("\treturn static_cast<{type}>({lower_first_letter}_);\n".format(type=type,lower_first_letter=lower_first_letter))
+                        file.write("}\n")
+                    # Write Setter
+                    for attribute in packetData:
+                        # Skip PackageID
+                        if(attribute["Name"] == "PackageID"):
+                            continue
+                        value = list(item.values())[0] 
+                        noSpaceString = value.lstrip().replace(" ", "")
+                        # Determine Data Type
+                        type = self.determineType(attribute)
+                        name = attribute["Name"].replace(" ", "")
+                        lower_first_letter = name[0].lower() + name[1:]
+                        file.write("void {packetName}Data::set{name}(const {type}& {lower_first_letter})\n{{\n".format(type = type,packetName=packetName,name = name, lower_first_letter=lower_first_letter))
+                        file.write("\t{name}_  =  {name};\n".format(name=lower_first_letter))
+                        file.write("}\n")
+                    if (packetName == "MotorFaults"):
+                        file.write("QString MotorFaultsData::toString() const\n{\n")
+                        file.write('\treturn "0x" + QString::number(m0ErrorFlags_, 16) + " 0x" + QString::number(m0LimitFlags_, 16) + " 0x" + QString::number(m1ErrorFlags_, 16) + " 0x" + QString::number(m1LimitFlags_, 16);\n}')
+                
                     
               
 test = DataLayer()

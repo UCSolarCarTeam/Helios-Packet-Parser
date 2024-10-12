@@ -95,6 +95,16 @@ data =[
     {"Name": "Slip Speed", "Offset": 61, "Type": "float", "Unit": "Hz", "detail": "", "enum": {}}
   ]
 },
+{
+  "Mppt": [
+    {"Name": "PackageID", "Offset": 0, "Type": "uchar", "Unit": "", "detail": {"isUnit": True}, "enum": {}},
+    {"Name": "Mppt Status", "Offset": 1, "Type": "uchar", "Unit": "", "detail": {"bits": "0-2 Channel Number (0 ≤ value ≤ 3)", "bit7": "Alive bit"}, "enum": {}},
+    {"Name": "Array Voltage", "Offset": 2, "Type": "float", "Unit": "10 mV", "detail": "", "enum": {}},
+    {"Name": "Array Current", "Offset": 4, "Type": "float", "Unit": "mA", "detail": "", "enum": {}},
+    {"Name": "Battery Voltage", "Offset": 6, "Type": "float", "Unit": "10 mV", "detail": "", "enum": {}},
+    {"Name": "Temperature", "Offset": 8, "Type": "float", "Unit": "1/100th °C", "detail": "", "enum": {}}
+  ]
+},
 {"AuxBms":[
     {"Name": "PackageID", "Offset": 0, "Type": "uchar", "Unit": "", "detail":{"isUnit":False},"enum":{}},
     {
