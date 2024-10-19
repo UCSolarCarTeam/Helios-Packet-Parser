@@ -161,17 +161,17 @@ class DataLayer:
                         if(attribute["Name"] == "PackageID"):
                             continue
                         # This package contains an enum to generate
-                        if(attribute["enum"]):
-                            enumName = list(attribute["enum"].items())[0][0]
-                            listValues = list(attribute["enum"].items())[0][1]
-                            file.write("\t enum {enumName}\n{{\n".format(enumName=enumName))
-                            for object in listValues:
-                                key=(list(object.items())[0][0])
-                                value =(list(object.items())[0][1])
-                                file.write("\t{macroName}={macroValue},\n".format(macroName=value,macroValue=key))
-                            file.write("};\n")    
+                        # if(attribute["enum"]):
+                        #     enumName = list(attribute["enum"].items())[0][0]
+                        #     listValues = list(attribute["enum"].items())[0][1]
+                        #     file.write("\t enum {enumName}\n{{\n".format(enumName=enumName))
+                        #     for object in listValues:
+                        #         key=(list(object.items())[0][0])
+                        #         value =(list(object.items())[0][1])
+                        #         file.write("\t{macroName}={macroValue},\n".format(macroName=value,macroValue=key))
+                        #     file.write("};\n")    
                         # If has bitflag, need to iterate through list in details and create proper functions.
-                        if(attribute["Unit"] == "bitflag"):
+                        if(attribute["detail"]["Quantity"] == "bitflag"):
                             # Motor number empty by default, and given a value when motor data packet is detected
                             motorNum=""
                             if (packetName == "MotorFaults"):
@@ -527,5 +527,5 @@ class DataLayer:
 test = DataLayer()
 test.genQMethods()
 test.generateInterface()
-test.generateHeader()
-test.genCppFile()
+# test.generateHeader()
+# test.genCppFile()
