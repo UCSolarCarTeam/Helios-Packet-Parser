@@ -2,11 +2,8 @@ import os
 import sys
 import re
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../Test Data')))
-from TestData import data
-
 class PacketDecoderGen:
-    def __init__ (self, parsedData=data):
+    def __init__ (self, parsedData):
         self.basicHeader = "#pragma once\n\n#include <QObject>\n"
         self.parsedData = parsedData
         self.type = ""
@@ -93,8 +90,3 @@ class PacketDecoderGen:
             file.write('\n\t\tqWarning() << "Actual" << messageData.size() << "Expected" << MessageDefines::getLengthForMessage(messageType);')
             file.write('\n\t}\n}')
             file.close()
-
-packetDecoder = PacketDecoderGen()
-packetDecoder.generateInterface()
-packetDecoder.generateHeader()
-packetDecoder.generateSource()
