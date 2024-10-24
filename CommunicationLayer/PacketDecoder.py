@@ -1,8 +1,8 @@
 import os
-import sys
 import re
+import json
 
-class PacketDecoderGen:
+class PacketDecoder:
     def __init__ (self, parsedData):
         self.basicHeader = "#pragma once\n\n#include <QObject>\n"
         self.parsedData = parsedData
@@ -23,20 +23,13 @@ class PacketDecoderGen:
         # Create the header file
         with open(filePath,"w") as file:
             file.write(self.basicHeader)
-            sectionList = []
-            for sectionObj in self.parsedData:
-                sectionName = list(sectionObj.keys())[0]
-                sectionName = re.sub(r'\d+', '', sectionName)
-                if sectionName in sectionList:
-                    continue
-                sectionList.append(sectionName)
+            for sectionName in self.parsedData:
                 file.write('#include "../MessagingFramework/{section}Message.h"\n'.format(section=sectionName))
             file.write("\n")
             file.write("class {name} : public QObject \n{{\n\tQOBJECT\npublic:\n".format(name=className))
             file.write("\tvirtual ~{name}() {{}}\n\n".format(name=className))
             file.write("signals:\n")
-            for sectionObj in self.parsedData:
-                sectionName = list(sectionObj.keys())[0]
+            for sectionName in self.parsedData:
                 file.write("\tvoid packetDecoded(const {section}Message);\n".format(section=sectionName))
             file.write("};\n")
             file.close()
@@ -62,7 +55,6 @@ class PacketDecoderGen:
         filePath = os.path.join(self.directory_path, fileName)
         with open(filePath,"w") as file:
             file.write("#include<QDebug>\n#include<QElapsedTimer>\n\n")
-            file.write('#include "../../DataLayer/CcsData/CcsData.h"\n')
             file.write('#include "{name}.h"\n'.format(name=className))
             file.write('#include "../PacketChecksumChecker/I_PacketChecksumChecker.h"\n')
             file.write('#include "../MessagingFramework/MessageDefines.h"\n\n')
@@ -77,8 +69,7 @@ class PacketDecoderGen:
             file.write("\tif (MessageDefines::getLengthForMessage(messageType) == messageData.size())\n")
             file.write("\t{\n\t\tswitch (messageType)\n\t\t{")
 
-            for sectionObj in self.parsedData:
-                sectionName = list(sectionObj.keys())[0]
+            for sectionName in self.parsedData:
                 snakeCaseName = re.sub(r'(?<!^)(?=[A-Z0-9])', '_', sectionName).upper()
                 sectionName = re.sub(r'\d+', '', sectionName)
 
