@@ -71,7 +71,6 @@ class PacketDecoder:
 
             for sectionName in self.parsedData:
                 snakeCaseName = re.sub(r'(?<!^)(?=[A-Z0-9])', '_', sectionName).upper()
-                sectionName = re.sub(r'\d+', '', sectionName)
 
                 file.write("\n\t\t\tcase MessageDefines::{section}:\n".format(section=snakeCaseName))
                 file.write("\t\t\t\temit packetDecoded({section}Message(messageData));\n\t\t\t\treturn;\n".format(section=sectionName))
