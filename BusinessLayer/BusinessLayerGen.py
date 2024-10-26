@@ -7,30 +7,46 @@ class BusinessLayerGen:
     def genJsonMessageBuilder(self):
         print("Generating I_JsonMessageBuilder.h")
 
-        newLines = ""
-        
+        interfaceNewLines = ""
+        headerNewLines = ""
+
         for key, value in self.data.items():
             if(value[0]["Detail"]["Quantity"] > 1 or self.__compareStringIntDifference([item["Name"] for item in value])):
-                classType = "virtual QJsonArray"
+                classType = "QJsonArray"
             else:
-                classType = "virtual QJsonObject"
+                classType = "QJsonObject"
 
             className = "build" + key + "Message"
-            classParams = "(const I_" + key + "Data& data) = 0"
-            newLine = classType + " " + className + classParams + ";\n\t"
-            newLines += newLine
+            classParams = "(const I_" + key + "Data& data)"
 
-        template_path = "./BusinessLayer/Templates/I_JsonMessageBuilder.h"
+            interfaceNewLine = "virtual " + classType + " " + className + classParams + " = 0;\n\t"
+            interfaceNewLines += interfaceNewLine
 
-        with open(template_path, "r") as file:
+            headerNewLine = classType + " " + className + classParams + ";\n\t"
+            headerNewLines += headerNewLine
+
+        interfaceTemplatePath = "./BusinessLayer/Templates/I_JsonMessageBuilder.h"
+        headerTemplatePath = "./BusinessLayer/Templates/JsonMessageBuilder.h"
+
+        with open(interfaceTemplatePath, "r") as file:
             content = file.read()
 
-        content = content.replace("$$PUBLIC_FUNCTIONS$$", newLines)
+        content = content.replace("$$PUBLIC_FUNCTIONS$$", interfaceNewLines)
 
         with open('Output/I_JsonMessageBuilder.h', 'w') as file:
             file.write(content)
 
         print("I_JsonMessageBuilder.h generated successfully")
+
+        with open(headerTemplatePath, "r") as file:
+            content = file.read()
+
+        content = content.replace("$$PUBLIC_FUNCTIONS$$", headerNewLines)
+
+        with open('Output/JsonMessageBuilder.h', 'w') as file:
+            file.write(content)
+
+        print("JsonMessageBuilder.h generated successfully")
 
     def __stringsDifferByNumber(self, str1, str2):
         int1 = re.findall(r'\d+', str1)
