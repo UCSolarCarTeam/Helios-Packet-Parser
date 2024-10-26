@@ -1,6 +1,6 @@
 __pycache__
 *.ts
-output/
+Output/
 .vscode
 .venv
 .DS_Store
