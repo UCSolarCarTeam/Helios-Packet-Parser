@@ -1,0 +1,831 @@
+{
+    "KeyMotor": [
+        {
+            "Name": "PackageID",
+            "Offset": 0.0,
+            "Type": "uchar",
+            "Unit": null,
+            "Detail": {
+                "ID": 1,
+                "Quantity": 1
+            }
+        },
+        {
+            "Name": "M0Alive",
+            "Offset": 1.0,
+            "Type": "uchar",
+            "Unit": "boolean",
+            "Detail": null
+        },
+        {
+            "Name": "M0SetCurrent",
+            "Offset": 2.0,
+            "Type": "float",
+            "Unit": "%",
+            "Detail": null
+        },
+        {
+            "Name": "M0SetVelocity",
+            "Offset": 6.0,
+            "Type": "float",
+            "Unit": "RPM",
+            "Detail": null
+        },
+        {
+            "Name": "M0BusCurrent",
+            "Offset": 10.0,
+            "Type": "float",
+            "Unit": "A",
+            "Detail": null
+        },
+        {
+            "Name": "M0BusVoltage",
+            "Offset": 14.0,
+            "Type": "float",
+            "Unit": "V",
+            "Detail": null
+        },
+        {
+            "Name": "M0VehicleVelocity",
+            "Offset": 18.0,
+            "Type": "float",
+            "Unit": "m/s",
+            "Detail": null
+        },
+        {
+            "Name": "M1Alive",
+            "Offset": 22.0,
+            "Type": "uchar",
+            "Unit": "boolean",
+            "Detail": null
+        },
+        {
+            "Name": "M1SetCurrent",
+            "Offset": 23.0,
+            "Type": "float",
+            "Unit": "%",
+            "Detail": null
+        },
+        {
+            "Name": "M1SetVelocity",
+            "Offset": 27.0,
+            "Type": "float",
+            "Unit": "RPM",
+            "Detail": null
+        },
+        {
+            "Name": "M1BusCurrent",
+            "Offset": 31.0,
+            "Type": "float",
+            "Unit": "A",
+            "Detail": null
+        },
+        {
+            "Name": "M1BusVoltage",
+            "Offset": 35.0,
+            "Type": "float",
+            "Unit": "V",
+            "Detail": null
+        },
+        {
+            "Name": "M1VehicleVelocity",
+            "Offset": 39.0,
+            "Type": "float",
+            "Unit": "m/s",
+            "Detail": null
+        }
+    ],
+    "MotorDetails": [
+        {
+            "Name": "PackageID",
+            "Offset": 0.0,
+            "Type": "uchar",
+            "Unit": null,
+            "Detail": {
+                "ID": 2,
+                "Quantity": 2
+            }
+        },
+        {
+            "Name": "PhaseCCurrent",
+            "Offset": 1.0,
+            "Type": "float",
+            "Unit": "A(rms)",
+            "Detail": null
+        },
+        {
+            "Name": "PhaseBCurrent",
+            "Offset": 5.0,
+            "Type": "float",
+            "Unit": "A(rms)",
+            "Detail": null
+        },
+        {
+            "Name": "MotorVoltageReal",
+            "Offset": 9.0,
+            "Type": "float",
+            "Unit": "V",
+            "Detail": null
+        },
+        {
+            "Name": "MotorVoltageImaginary",
+            "Offset": 13.0,
+            "Type": "float",
+            "Unit": "V",
+            "Detail": null
+        },
+        {
+            "Name": "MotorCurrentReal",
+            "Offset": 17.0,
+            "Type": "float",
+            "Unit": "A",
+            "Detail": null
+        },
+        {
+            "Name": "MotorCurrentImaginary",
+            "Offset": 21.0,
+            "Type": "float",
+            "Unit": "A",
+            "Detail": null
+        },
+        {
+            "Name": "BackEMF",
+            "Offset": 25.0,
+            "Type": "float",
+            "Unit": "V",
+            "Detail": null
+        },
+        {
+            "Name": "15VVoltageRailSupply",
+            "Offset": 29.0,
+            "Type": "float",
+            "Unit": "V",
+            "Detail": null
+        },
+        {
+            "Name": "3.3VVoltageRailSupply",
+            "Offset": 33.0,
+            "Type": "float",
+            "Unit": "V",
+            "Detail": null
+        },
+        {
+            "Name": "1.9VVoltageRailSupply",
+            "Offset": 37.0,
+            "Type": "float",
+            "Unit": "V",
+            "Detail": null
+        },
+        {
+            "Name": "Heat-sinkTemperature",
+            "Offset": 41.0,
+            "Type": "float",
+            "Unit": "\u00b0C",
+            "Detail": null
+        },
+        {
+            "Name": "MotorTemperature",
+            "Offset": 45.0,
+            "Type": "float",
+            "Unit": "\u00b0C",
+            "Detail": null
+        },
+        {
+            "Name": "DSPBoardTemp",
+            "Offset": 49.0,
+            "Type": "float",
+            "Unit": "\u00b0C",
+            "Detail": null
+        },
+        {
+            "Name": "DCBusAmpHours",
+            "Offset": 53.0,
+            "Type": "float",
+            "Unit": "Ah",
+            "Detail": null
+        },
+        {
+            "Name": "Odometer",
+            "Offset": 57.0,
+            "Type": "float",
+            "Unit": "m",
+            "Detail": null
+        },
+        {
+            "Name": "SlipSpeed",
+            "Offset": 61.0,
+            "Type": "float",
+            "Unit": "Hz",
+            "Detail": null
+        }
+    ],
+    "DriverControls": [
+        {
+            "Name": "PackageID",
+            "Offset": 0.0,
+            "Type": "uchar",
+            "Unit": null,
+            "Detail": {
+                "ID": 4,
+                "Quantity": 1
+            }
+        },
+        {
+            "Name": "DriverControlsBoardAlive",
+            "Offset": 1.0,
+            "Type": "uchar",
+            "Unit": "boolean",
+            "Detail": null
+        },
+        {
+            "Name": "LightsInputs",
+            "Offset": 2.0,
+            "Type": "uchar",
+            "Unit": "bitflag",
+            "Detail": {
+                "0x01": "HeadlightsOff",
+                "0x02": "HeadlightsLow",
+                "0x04": "HeadlightsHigh",
+                "0x08": "SignalRight",
+                "0x10": "SignalLeft",
+                "0x20": "Hazard",
+                "0x40": "Interior"
+            }
+        },
+        {
+            "Name": "MusicInputs",
+            "Offset": 3.0,
+            "Type": "uchar",
+            "Unit": "bitflag",
+            "Detail": {
+                "0x01": "VolumeUp",
+                "0x02": "VolumeDown",
+                "0x04": "NextSong",
+                "0x08": "PrevSong"
+            }
+        },
+        {
+            "Name": "Acceleration",
+            "Offset": 4.0,
+            "Type": "short uint",
+            "Unit": "12bit uint",
+            "Detail": null
+        },
+        {
+            "Name": "RegenBraking",
+            "Offset": 6.0,
+            "Type": "short uint",
+            "Unit": "12bit uint",
+            "Detail": null
+        },
+        {
+            "Name": "DriverInputs",
+            "Offset": 8.0,
+            "Type": "uchar",
+            "Unit": "bitflag",
+            "Detail": {
+                "0x01": "Brakes",
+                "0x02": "Forward",
+                "0x04": "Reverse",
+                "0x08": "PushToTalk",
+                "0x10": "Horn",
+                "0x20": "Reset",
+                "0x40": "Aux",
+                "0x80": "Lap"
+            }
+        }
+    ],
+    "MotorFaults": [
+        {
+            "Name": "PackageID",
+            "Offset": 0.0,
+            "Type": "uchar",
+            "Unit": null,
+            "Detail": {
+                "ID": 5,
+                "Quantity": 1
+            }
+        },
+        {
+            "Name": "M0ErrorFlags",
+            "Offset": 1.0,
+            "Type": "uchar",
+            "Unit": "bitflag",
+            "Detail": {
+                "0x01": "MotorOverSpeed",
+                "0x02": "SoftwareOverCurrent",
+                "0x04": "DCBusOverVoltage",
+                "0x08": "BadMotorPositionHallSequence",
+                "0x10": "WatchdogCausedLastReset",
+                "0x20": "ConfigReadError",
+                "0x40": "Rail15VUnderVoltageLockOut",
+                "0x80": "DesaturationFault"
+            }
+        },
+        {
+            "Name": "M1ErrorFlags",
+            "Offset": 2.0,
+            "Type": "uchar",
+            "Unit": "bitflag",
+            "Detail": {
+                "0x01": "MotorOverSpeed",
+                "0x02": "SoftwareOverCurrent",
+                "0x04": "DCBusOverVoltage",
+                "0x08": "BadMotorPositionHallSequence",
+                "0x10": "WatchdogCausedLastReset",
+                "0x20": "ConfigReadError",
+                "0x40": "Rail15VUnderVoltageLockOut",
+                "0x80": "DesaturationFault"
+            }
+        },
+        {
+            "Name": "M0LimitFlags",
+            "Offset": 3.0,
+            "Type": "uchar",
+            "Unit": "bitflag",
+            "Detail": {
+                "0x01": "OutputVoltagePWM",
+                "0x02": "MotorCurrent",
+                "0x04": "Velocity",
+                "0x08": "BusCurrent",
+                "0x10": "BusVoltageUpper",
+                "0x20": "BusVoltageLower",
+                "0x40": "IPMOrMotorTemperature"
+            }
+        },
+        {
+            "Name": "M1LimitFlags",
+            "Offset": 4.0,
+            "Type": "uchar",
+            "Unit": "bitflag",
+            "Detail": {
+                "0x01": "OutputVoltagePWM",
+                "0x02": "MotorCurrent",
+                "0x04": "Velocity",
+                "0x08": "BusCurrent",
+                "0x10": "BusVoltageUpper",
+                "0x20": "BusVoltageLower",
+                "0x40": "IPMOrMotorTemperature"
+            }
+        },
+        {
+            "Name": "M0CANRXErrorCount",
+            "Offset": 5.0,
+            "Type": "uchar",
+            "Unit": "#",
+            "Detail": null
+        },
+        {
+            "Name": "M0CANTXErrorCount",
+            "Offset": 6.0,
+            "Type": "uchar ",
+            "Unit": "#",
+            "Detail": null
+        },
+        {
+            "Name": "M1CANRXErrorCount",
+            "Offset": 7.0,
+            "Type": "uchar",
+            "Unit": "#",
+            "Detail": null
+        },
+        {
+            "Name": "M1CanTxErrorCount",
+            "Offset": 8.0,
+            "Type": "uchar ",
+            "Unit": "#",
+            "Detail": null
+        }
+    ],
+    "BatteryFaults": [
+        {
+            "Name": "PackageID",
+            "Offset": 0.0,
+            "Type": "uchar",
+            "Unit": null,
+            "Detail": {
+                "ID": 6,
+                "Quantity": 1
+            }
+        },
+        {
+            "Name": "ErrorFlags",
+            "Offset": 1.0,
+            "Type": "uint",
+            "Unit": "bitflag",
+            "Detail": {
+                "0x00000001": "InternalCommununicationFault",
+                "0x00000002": "InternalConversionFault",
+                "0x00000004": "WeakCellFault",
+                "0x00000008": "LowCellVoltageFault",
+                "0x00000010": "OpenWiringFault",
+                "0x00000020": "CurrentSensorFault",
+                "0x00000040": "PackVoltageSensorFault",
+                "0x00000080": "WeakPackFault",
+                "0x00000100": "VoltageRedundancyFault",
+                "0x00000200": "FanMonitorFault",
+                "0x00000400": "ThermistorFault",
+                "0x00000800": "CanbusCommunicationsFault",
+                "0x00001000": "AlwaysOnSupplyFault",
+                "0x00002000": "HighVoltageIsolationFault",
+                "0x00004000": "PowerSupply12VFault",
+                "0x00008000": "ChargeLimitEnforcementFault",
+                "0x00010000": "DischargeLimitEnforcementFault",
+                "0x00020000": "ChargerSafetyRelayFault",
+                "0x00040000": "InternalMemoryFault",
+                "0x00080000": "InternalThermistorFault",
+                "0x00100000": "InternalLogicFault"
+            }
+        },
+        {
+            "Name": "LimitFlags",
+            "Offset": 4.0,
+            "Type": "short uint",
+            "Unit": "bitflag",
+            "Detail": {
+                "0x0001": "DCLReducedDueToLowSOC",
+                "0x0002": "DCLReducedDueToHighCellResistance",
+                "0x0004": "DCLReducedDueToTemperature",
+                "0x0008": "DCLReducedDueToLowCellVoltage",
+                "0x0010": "DCLReducedDueToLowPackVoltage",
+                "0x0040": "DCLAndCCLReducedDueToVoltageFailsafe",
+                "0x0080": "DCLAndCCLReducedDueToCommunicationFailsafe",
+                "0x0200": "CCLReducedDueToHighSOC",
+                "0x0400": "CCLReducedDueToHighCellResistance",
+                "0x0800": "CCLReducedDueToTemperature",
+                "0x1000": "CCLReducedDueToHighCellVoltage",
+                "0x2000": "CCLReducedDueToHighPackVoltage",
+                "0x4000": "CCLReducedDueToChargerLatch",
+                "0x8000": "CCLReducedDueToAlternateCurrentLimit "
+            }
+        }
+    ],
+    "Battery": [
+        {
+            "Name": "PackageID",
+            "Offset": 0.0,
+            "Type": "uchar",
+            "Unit": null,
+            "Detail": {
+                "ID": 7,
+                "Quantity": 1
+            }
+        },
+        {
+            "Name": "BMUAlive",
+            "Offset": 1.0,
+            "Type": "uchar",
+            "Unit": "Boolean",
+            "Detail": null
+        },
+        {
+            "Name": "BMSRelayStatus",
+            "Offset": 2.0,
+            "Type": "uchar",
+            "Unit": "bitflag",
+            "Detail": {
+                "0x01": "DischargeRelayEnabled",
+                "0x02": "ChargeRelayEnabled",
+                "0x04": "ChargerSafetyEnabled",
+                "0x08": "MalfunctionIndicatorActive",
+                "0x10": "MultiPurposeInputSignalStatus",
+                "0x20": "AlwaysOnSignalStatus",
+                "0x40": "IsReadySignalStatus",
+                "0x80": "IsChargingSignalStatus"
+            }
+        },
+        {
+            "Name": "PopulatedCells",
+            "Offset": 3.0,
+            "Type": "uchar",
+            "Unit": "#",
+            "Detail": null
+        },
+        {
+            "Name": "12vInputVoltage",
+            "Offset": 4.0,
+            "Type": "float",
+            "Unit": "0.1 V",
+            "Detail": null
+        },
+        {
+            "Name": "FanVoltage",
+            "Offset": 8.0,
+            "Type": "float",
+            "Unit": "0.01 V",
+            "Detail": null
+        },
+        {
+            "Name": "PackCurrent",
+            "Offset": 12.0,
+            "Type": "float",
+            "Unit": "0.1 A",
+            "Detail": null
+        },
+        {
+            "Name": "PackVoltage",
+            "Offset": 16.0,
+            "Type": "float",
+            "Unit": "0.1 V",
+            "Detail": null
+        },
+        {
+            "Name": "PackStateofCharge",
+            "Offset": 20.0,
+            "Type": "float",
+            "Unit": "0.5 %",
+            "Detail": null
+        },
+        {
+            "Name": "PackAmphours",
+            "Offset": 24.0,
+            "Type": "float",
+            "Unit": "0.1 Ah",
+            "Detail": null
+        },
+        {
+            "Name": "PackDepthOfDischarge",
+            "Offset": 28.0,
+            "Type": "float",
+            "Unit": "0.5 %",
+            "Detail": null
+        },
+        {
+            "Name": "HighTemperature",
+            "Offset": 32.0,
+            "Type": "uchar",
+            "Unit": "\u00b0C",
+            "Detail": null
+        },
+        {
+            "Name": "HighThermistorID",
+            "Offset": 33.0,
+            "Type": "uchar",
+            "Unit": "#",
+            "Detail": null
+        },
+        {
+            "Name": "LowTemperature",
+            "Offset": 34.0,
+            "Type": "uchar",
+            "Unit": "\u00b0C",
+            "Detail": null
+        },
+        {
+            "Name": "LowThermistorID",
+            "Offset": 35.0,
+            "Type": "uchar",
+            "Unit": "#",
+            "Detail": null
+        },
+        {
+            "Name": "AverageTemperature",
+            "Offset": 36.0,
+            "Type": "uchar",
+            "Unit": "\u00b0C",
+            "Detail": null
+        },
+        {
+            "Name": "InternalTemperature",
+            "Offset": 37.0,
+            "Type": "uchar",
+            "Unit": "\u00b0C",
+            "Detail": null
+        },
+        {
+            "Name": "FanSpeed",
+            "Offset": 38.0,
+            "Type": "uchar",
+            "Unit": "#",
+            "Detail": null
+        },
+        {
+            "Name": "RequestedFanSpeed",
+            "Offset": 39.0,
+            "Type": "uchar",
+            "Unit": "#",
+            "Detail": null
+        },
+        {
+            "Name": "LowCellVoltage",
+            "Offset": 40.0,
+            "Type": "short uint",
+            "Unit": "0.1 mV",
+            "Detail": null
+        },
+        {
+            "Name": "LowCellVoltageID",
+            "Offset": 42.0,
+            "Type": "uchar",
+            "Unit": "#",
+            "Detail": null
+        },
+        {
+            "Name": "HighCellVoltage",
+            "Offset": 43.0,
+            "Type": "short uint",
+            "Unit": "0.1 mV",
+            "Detail": null
+        },
+        {
+            "Name": "HighCellVoltageID",
+            "Offset": 45.0,
+            "Type": "uchar",
+            "Unit": "#",
+            "Detail": null
+        },
+        {
+            "Name": "AverageCellVoltage",
+            "Offset": 46.0,
+            "Type": "short uint",
+            "Unit": "0.1 mV",
+            "Detail": null
+        }
+    ],
+    "Mppt": [
+        {
+            "Name": "PackageID",
+            "Offset": 0.0,
+            "Type": "uchar",
+            "Unit": null,
+            "Detail": {
+                "ID": 9,
+                "Quantity": 4,
+                "UniqueId": true
+            }
+        },
+        {
+            "Name": "MPPTStatus",
+            "Offset": 1.0,
+            "Type": "uchar",
+            "Unit": "#",
+            "Detail": null
+        },
+        {
+            "Name": "ArrayVoltage",
+            "Offset": 2.0,
+            "Type": "short uint",
+            "Unit": "10 mV",
+            "Detail": null
+        },
+        {
+            "Name": "ArrayCurrent",
+            "Offset": 4.0,
+            "Type": "short uint",
+            "Unit": "mA",
+            "Detail": null
+        },
+        {
+            "Name": "BatteryVoltage",
+            "Offset": 6.0,
+            "Type": "short uint",
+            "Unit": "10 mV",
+            "Detail": null
+        },
+        {
+            "Name": "Temperature",
+            "Offset": 8.0,
+            "Type": "short uint",
+            "Unit": "1/100th \u00b0C",
+            "Detail": null
+        }
+    ],
+    "Lights": [
+        {
+            "Name": "PackageID",
+            "Offset": 0.0,
+            "Type": "uchar",
+            "Unit": null,
+            "Detail": {
+                "ID": 10,
+                "Quantity": 1
+            }
+        },
+        {
+            "Name": "LightsAlive",
+            "Offset": 1.0,
+            "Type": "uchar ",
+            "Unit": "Boolean",
+            "Detail": null
+        },
+        {
+            "Name": "LightsStatus",
+            "Offset": 2.0,
+            "Type": "uchar",
+            "Unit": "bitflag",
+            "Detail": {
+                "0x01": "LowBeams",
+                "0x02": "HighBeams",
+                "0x04": "BrakeLights",
+                "0x08": "LeftSignal",
+                "0x10": "RightSignal",
+                "0x20": "BmsStrobeLight"
+            }
+        }
+    ],
+    "AuxBms": [
+        {
+            "Name": "PackageID",
+            "Offset": 0.0,
+            "Type": "uchar",
+            "Unit": null,
+            "Detail": {
+                "ID": 11,
+                "Quantity": 1
+            }
+        },
+        {
+            "Name": "PrechargeState",
+            "Offset": 1.0,
+            "Type": "uchar",
+            "Unit": "flag",
+            "Detail": {
+                "OFF" : 0,
+                "COMMON_ENGAGED":1,
+                "CHARGE_ENGAGED":2,
+                "DISCHARGE_ENGAGED":3,
+                "ALL_ENGAGED": 4,
+                "INVALID_STATE":5
+            }
+        },
+        {
+            "Name": "AuxVoltage",
+            "Offset": 2.0,
+            "Type": "uchar",
+            "Unit": "mV",
+            "Detail": null
+        },
+        {
+            "Name": "AuxBmsAlive",
+            "Offset": 3.0,
+            "Type": "uchar",
+            "Unit": "Boolean",
+            "Detail": null
+        },
+        {
+            "Name": "StrobeBmsLight",
+            "Offset": 4.0,
+            "Type": "uchar",
+            "Unit": "Boolean",
+            "Detail": null
+        },
+        {
+            "Name": "AllowCharge",
+            "Offset": 5.0,
+            "Type": "uchar",
+            "Unit": "Boolean",
+            "Detail": null
+        },
+        {
+            "Name": "HighVoltageEnableState",
+            "Offset": 6.0,
+            "Type": "uchar",
+            "Unit": "Boolean",
+            "Detail": null
+        },
+        {
+            "Name": "AllowDischarge",
+            "Offset": 7.0,
+            "Type": "uchar",
+            "Unit": "Boolean",
+            "Detail": null
+        },
+        {
+            "Name": "OrionCanReceivedRecently",
+            "Offset": 8.0,
+            "Type": "uchar",
+            "Unit": "Boolean",
+            "Detail": null
+        },
+        {
+            "Name": "AuxContactorDebugInfo",
+            "Offset": 9.0,
+            "Type": "uchar",
+            "Unit": "bitflag",
+            "Detail": {
+                "0x01": "ChargeContactorError",
+                "0x02": "DischargeContactorError",
+                "0x04": "CommonContactorError",
+                "0x08": "DischargeShouldTrip",
+                "0x10": "ChargeShouldTrip",
+                "0x20": "ChargeOpenButShouldBeClosed",
+                "0x40": "DischargeOpenButShouldBeClosed"
+            }
+        },
+        {
+            "Name": "AuxTrip",
+            "Offset": 10.0,
+            "Type": "uchar",
+            "Unit": "bitflag",
+            "Detail": {
+                "0x0001": "ChargeTripDueToHighCellVoltage",
+                "0x0002": "ChargeTripDueToHighTemperatureAndCurrent",
+                "0x0004": "ChargeTripDueToPackCurrent",
+                "0x0008": "DischargeTripDueToLowCellVoltage",
+                "0x0010": "DischargeTripDueToHighTemperatureAndCurrent",
+                "0x0020": "DischargeTripDueToPackCurrent",
+                "0x0040": "ProtectionTrip"
+            }
+        }
+    ]
+}
