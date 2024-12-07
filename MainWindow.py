@@ -88,14 +88,12 @@ class MainWindow(QMainWindow):
                 self -> build in action
             @retun:
                 None
-        '''        
+        '''
         try:
             layout = QVBoxLayout()
-            # Align layout to top-left
             layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
 
             # Attach File Section
-                #Label:
             csv_label = QLabel("Attach File")
             csv_label.setStyleSheet("""
                 font-family: 'Arial';  /* Font name */
@@ -105,9 +103,7 @@ class MainWindow(QMainWindow):
             """)
             layout.addWidget(csv_label)
 
-                # Horizontal layout for Line Edit and Button
             csv_input_layout = QHBoxLayout()
-                # Line Edit:
             self.csv_lineEdit_Hermes = QLineEdit()
             self.csv_lineEdit_Hermes.setStyleSheet("""
                 font-family: 'Arial';  /* Font name */
@@ -115,7 +111,6 @@ class MainWindow(QMainWindow):
                 color: white;          /* Font color */                       
             """)
             csv_input_layout.addWidget(self.csv_lineEdit_Hermes)
-                # Button:
             csv_button = QPushButton("Browse")
             csv_button.setStyleSheet("""
                 font-family: 'Arial';  /* Font name */
@@ -127,7 +122,6 @@ class MainWindow(QMainWindow):
             layout.addLayout(csv_input_layout)
 
             # Generate Section
-                #Button:
             generate_button = QPushButton("Generate")
             generate_button.setStyleSheet("""
                 font-family: 'Arial';  /* Font name */
@@ -136,34 +130,30 @@ class MainWindow(QMainWindow):
             """)
             generate_button.setFixedSize(250, 60)
             generate_button.clicked.connect(lambda: self.generate_buttonFunction_Hermes(self.csv_lineEdit_Hermes.text()))
-
-                # Create a horizontal layout to center the button
             center_layout = QHBoxLayout()
-            center_layout.addStretch()  # Add stretch before the button
-            center_layout.addWidget(generate_button)  # Add the button to the layout
-            center_layout.addStretch()  # Add stretch after the button
-            layout.addLayout(center_layout)        
-                # Create a horizontal layout to center the hidden label
+            center_layout.addStretch()
+            center_layout.addWidget(generate_button)
+            center_layout.addStretch()
+            layout.addLayout(center_layout)
+
+            # Label Section
             label_layout = QHBoxLayout()
-            label_layout.addStretch()  # Add stretch before the label
-                #Label:
+            label_layout.addStretch()
             self.hidden_label_Hermes = QLabel("This is a hidden label")
             self.hidden_label_Hermes.setStyleSheet("""
                 font-family: 'Arial';  /* Font name */
                 font-size: 18px;       /* Font size */
-                color: red;          /* Font color */       
+                color: red;            /* Font color */       
                 font-weight: bold;     /* Font weight */                                                   
             """)
-            self.hidden_label_Hermes.setVisible(False)  # Initially hidden
+            self.hidden_label_Hermes.setVisible(False)
             label_layout.addWidget(self.hidden_label_Hermes)
-            label_layout.addStretch()  # Add stretch after the label
+            label_layout.addStretch()
             layout.addLayout(label_layout)
 
-            #Generate Files Section:
-                # Create a horizontal layout to center the "Generated Files" label
+            # Generated Files Section
             generated_files_label_layout = QHBoxLayout()
             generated_files_label_layout.addStretch()
-                #Label:
             generated_files_label = QLabel("Generated Files")
             generated_files_label.setStyleSheet("""
                 font-family: 'Arial';  /* Font name */
@@ -171,17 +161,40 @@ class MainWindow(QMainWindow):
                 font-weight: bold;     /* Font weight */
                 color: black;          /* Font color */                       
             """)
-            generated_files_label_layout.addWidget(generated_files_label)  # Add label to layout
-            generated_files_label_layout.addStretch()  # Add stretch after the label
+            generated_files_label_layout.addWidget(generated_files_label)
+            generated_files_label_layout.addStretch()
             layout.addLayout(generated_files_label_layout)
-                #Table:
-            self.table_widget_Hermes = QTableWidget()
-            self.table_widget_Hermes.setColumnCount(1)
-            self.table_widget_Hermes.setHorizontalHeaderLabels(["File Name"])
-            self.table_widget_Hermes.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)  # Stretch the column
-            self.table_widget_Hermes.setStyleSheet("""
-                QTableWidget {
-                    background: rgba(255, 255, 255, 150);  /* Semi-transparent white background for table */
+
+            # Progress Bar
+            progress_bar_layout = QHBoxLayout()
+            progress_bar_layout.addStretch()
+            self.progress_bar_Hermes = QProgressBar()
+            self.progress_bar_Hermes.setStyleSheet("""
+                QProgressBar {
+                    border: 2px solid grey;
+                    border-radius: 5px;
+                    background: white;
+                }
+                QProgressBar::chunk {
+                    background-color: #4CAF50; /* Green color for progress */
+                    width: 20px;
+                }
+            """)
+            self.progress_bar_Hermes.setFixedSize(400, 25)
+            self.progress_bar_Hermes.setValue(0)
+            self.progress_bar_Hermes.setTextVisible(False)
+            progress_bar_layout.addWidget(self.progress_bar_Hermes)
+            progress_bar_layout.addStretch()
+            layout.addLayout(progress_bar_layout)
+
+            # Tree Section
+            self.tree_widget_Hermes = QTreeWidget()
+            self.tree_widget_Hermes.setColumnCount(1)
+            self.tree_widget_Hermes.setHeaderLabels(["File Name"])
+            self.tree_widget_Hermes.headerItem().setTextAlignment(0, Qt.AlignmentFlag.AlignCenter)
+            self.tree_widget_Hermes.setStyleSheet("""
+                QTreeWidget {
+                    background: rgba(255, 255, 255, 150);  /* Semi-transparent white background for tree */
                     border: 1px solid rgba(0, 0, 0, 50);   /* Optional: Semi-transparent border */
                 }
                 QHeaderView::section {
@@ -190,33 +203,53 @@ class MainWindow(QMainWindow):
                     font-weight: bold;                     /* Header font style */
                     border: 1px solid rgba(0, 0, 0, 50);   /* Optional: Subtle border for header sections */
                 }
-                QTableWidget::item {
+                QTreeWidget::item {
                     background: rgba(255, 255, 255, 100);  /* Semi-transparent item background */
                 }
             """)
-            layout.addWidget(self.table_widget_Hermes)
+            layout.addWidget(self.tree_widget_Hermes)
 
-            # Save Files Section:
-                #Button
-            self.save_files_button_Hermes = QPushButton("Save Files")
+            # Save Files Section
+            save_button_layout = QHBoxLayout()
+
+            # Add stretch to center buttons
+            save_button_layout.addStretch()
+
+            # Save Selected Button
+            self.save_selected_button_Hermes = QPushButton("Save Selected")
+            self.save_selected_button_Hermes.setStyleSheet("""
+                font-family: 'Arial';  /* Font name */
+                font-size: 18px;       /* Font size */
+                color: white;          /* Font color */                       
+            """)
+            self.save_selected_button_Hermes.setFixedSize(250, 60)
+            self.save_selected_button_Hermes.setDisabled(True)  # Initially disabled
+            self.save_selected_button_Hermes.clicked.connect(self.saveSelected_buttonFunction_Hermes)
+            save_button_layout.addWidget(self.save_selected_button_Hermes)
+
+            # Space between buttons
+            save_button_layout.addSpacing(20)
+
+            # Save All Files Button
+            self.save_files_button_Hermes = QPushButton("Save All Files")
             self.save_files_button_Hermes.setStyleSheet("""
                 font-family: 'Arial';  /* Font name */
                 font-size: 18px;       /* Font size */
                 color: white;          /* Font color */                       
             """)
             self.save_files_button_Hermes.setFixedSize(250, 60)
-            self.save_files_button_Hermes.setDisabled(True)
-            self.save_files_button_Hermes.clicked.connect(self.save_files_buttonFunction_Hermes)
+            self.save_files_button_Hermes.setDisabled(True)  # Initially disabled
+            self.save_files_button_Hermes.clicked.connect(self.saveAllFiles_buttonFunction_Hermes)
+            save_button_layout.addWidget(self.save_files_button_Hermes)
 
-            # Create a horizontal layout to center the button
-            save_button_layout = QHBoxLayout()
-            save_button_layout.addStretch()  # Add stretch before the button
-            save_button_layout.addWidget(self.save_files_button_Hermes)  # Add the button to the layout
-            save_button_layout.addStretch()  # Add stretch after the button
+            # Add stretch to center buttons
+            save_button_layout.addStretch()
+
+            # Add the layout to the main layout
             layout.addLayout(save_button_layout)
 
-            #Version Section:
-                #Label:
+
+            # Version Section
             version_label = QLabel("01.00.00")
             version_label.setStyleSheet("""
                 font-family: 'Arial';  /* Font name */
@@ -224,28 +257,20 @@ class MainWindow(QMainWindow):
                 color: gray;           /* Font color */
                 font-weight: normal;   /* Font weight */
             """)
-            # Create a horizontal layout to align it to the bottom-right corner
             version_layout = QHBoxLayout()
-            version_layout.addStretch()  # Stretch to push label to the right
-            version_layout.addWidget(version_label)  # Add the version label to layout
+            version_layout.addStretch()
+            version_layout.addWidget(version_label)
             layout.addLayout(version_layout)
-
 
             # Set the layout for the tab
             self.tab1.setLayout(layout)
 
-            # Update current path
+            # Background image
             current_path = os.path.dirname(__file__).replace("\\", "/").replace('c', "C")
             background_path = resource_path(current_path + "/SolarCar_Hermesbackground.png")
-
-            # Ensure the background file exists
             if not os.path.exists(background_path):
                 raise FileNotFoundError(f"Background image not found: {background_path}")
-
-            # Set the object name for tab1
             self.tab1.setObjectName("tab1")
-
-            # Apply the background image to tab1 only
             self.tab1.setStyleSheet(f"""
                 QWidget#tab1 {{
                     background-image: url("{background_path}");
@@ -255,6 +280,7 @@ class MainWindow(QMainWindow):
             """)
         except Exception as e:
             logging.error("Raised error at setup_tab1. Error -> %s", e)
+
 
     def setup_tab2(self):
         '''
@@ -266,11 +292,9 @@ class MainWindow(QMainWindow):
         '''         
         try:
             layout = QVBoxLayout()
-            # Align layout to top-left
             layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
 
             # Attach File Section
-                #Label:
             csv_label = QLabel("Attach File")
             csv_label.setStyleSheet("""
                 font-family: 'Arial';  /* Font name */
@@ -280,9 +304,7 @@ class MainWindow(QMainWindow):
             """)
             layout.addWidget(csv_label)
 
-                # Horizontal layout for Line Edit and Button
             csv_input_layout = QHBoxLayout()
-                # Line Edit:
             self.csv_lineEdit_Dashboard = QLineEdit()
             self.csv_lineEdit_Dashboard.setStyleSheet("""
                 font-family: 'Arial';  /* Font name */
@@ -290,7 +312,6 @@ class MainWindow(QMainWindow):
                 color: white;          /* Font color */                       
             """)
             csv_input_layout.addWidget(self.csv_lineEdit_Dashboard)
-                # Button:
             csv_button = QPushButton("Browse")
             csv_button.setStyleSheet("""
                 font-family: 'Arial';  /* Font name */
@@ -302,7 +323,6 @@ class MainWindow(QMainWindow):
             layout.addLayout(csv_input_layout)
 
             # Generate Section
-                #Button:
             generate_button = QPushButton("Generate")
             generate_button.setStyleSheet("""
                 font-family: 'Arial';  /* Font name */
@@ -311,34 +331,30 @@ class MainWindow(QMainWindow):
             """)
             generate_button.setFixedSize(250, 60)
             generate_button.clicked.connect(lambda: self.generate_buttonFunction_Dashboard(self.csv_lineEdit_Dashboard.text()))
-
-                # Create a horizontal layout to center the button
             center_layout = QHBoxLayout()
-            center_layout.addStretch()  # Add stretch before the button
-            center_layout.addWidget(generate_button)  # Add the button to the layout
-            center_layout.addStretch()  # Add stretch after the button
-            layout.addLayout(center_layout)        
-                # Create a horizontal layout to center the hidden label
+            center_layout.addStretch()
+            center_layout.addWidget(generate_button)
+            center_layout.addStretch()
+            layout.addLayout(center_layout)
+
+            # Label Section
             label_layout = QHBoxLayout()
-            label_layout.addStretch()  # Add stretch before the label
-                #Label:
+            label_layout.addStretch()
             self.hidden_label_Dashboard = QLabel("This is a hidden label")
             self.hidden_label_Dashboard.setStyleSheet("""
                 font-family: 'Arial';  /* Font name */
                 font-size: 18px;       /* Font size */
-                color: red;          /* Font color */       
+                color: red;            /* Font color */       
                 font-weight: bold;     /* Font weight */                                                   
             """)
-            self.hidden_label_Dashboard.setVisible(False)  # Initially hidden
+            self.hidden_label_Dashboard.setVisible(False)
             label_layout.addWidget(self.hidden_label_Dashboard)
-            label_layout.addStretch()  # Add stretch after the label
+            label_layout.addStretch()
             layout.addLayout(label_layout)
 
-            #Generate Files Section:
-                # Create a horizontal layout to center the "Generated Files" label
+            # Generated Files Section
             generated_files_label_layout = QHBoxLayout()
             generated_files_label_layout.addStretch()
-                #Label:
             generated_files_label = QLabel("Generated Files")
             generated_files_label.setStyleSheet("""
                 font-family: 'Arial';  /* Font name */
@@ -346,17 +362,40 @@ class MainWindow(QMainWindow):
                 font-weight: bold;     /* Font weight */
                 color: white;          /* Font color */                       
             """)
-            generated_files_label_layout.addWidget(generated_files_label)  # Add label to layout
-            generated_files_label_layout.addStretch()  # Add stretch after the label
+            generated_files_label_layout.addWidget(generated_files_label)
+            generated_files_label_layout.addStretch()
             layout.addLayout(generated_files_label_layout)
-                #Table:
-            self.table_widget_Dashboard = QTableWidget()
-            self.table_widget_Dashboard.setColumnCount(1)
-            self.table_widget_Dashboard.setHorizontalHeaderLabels(["File Name"])
-            self.table_widget_Dashboard.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)  # Stretch the column
-            self.table_widget_Dashboard.setStyleSheet("""
-                QTableWidget {
-                    background: rgba(255, 255, 255, 150);  /* Semi-transparent white background for table */
+
+            # Progress Bar
+            progress_bar_layout = QHBoxLayout()
+            progress_bar_layout.addStretch()
+            self.progress_bar_Dashboard = QProgressBar()
+            self.progress_bar_Dashboard.setStyleSheet("""
+                QProgressBar {
+                    border: 2px solid grey;
+                    border-radius: 5px;
+                    background: white;
+                }
+                QProgressBar::chunk {
+                    background-color: #4CAF50; /* Green color for progress */
+                    width: 20px;
+                }
+            """)
+            self.progress_bar_Dashboard.setFixedSize(400, 25)
+            self.progress_bar_Dashboard.setValue(0)
+            self.progress_bar_Dashboard.setTextVisible(False)
+            progress_bar_layout.addWidget(self.progress_bar_Dashboard)
+            progress_bar_layout.addStretch()
+            layout.addLayout(progress_bar_layout)
+
+            # Tree Section
+            self.tree_widget_Dashboard = QTreeWidget()
+            self.tree_widget_Dashboard.setColumnCount(1)
+            self.tree_widget_Dashboard.setHeaderLabels(["File Name"])
+            self.tree_widget_Dashboard.headerItem().setTextAlignment(0, Qt.AlignmentFlag.AlignCenter)
+            self.tree_widget_Dashboard.setStyleSheet("""
+                QTreeWidget {
+                    background: rgba(255, 255, 255, 150);  /* Semi-transparent white background for tree */
                     border: 1px solid rgba(0, 0, 0, 50);   /* Optional: Semi-transparent border */
                 }
                 QHeaderView::section {
@@ -365,29 +404,50 @@ class MainWindow(QMainWindow):
                     font-weight: bold;                     /* Header font style */
                     border: 1px solid rgba(0, 0, 0, 50);   /* Optional: Subtle border for header sections */
                 }
-                QTableWidget::item {
+                QTreeWidget::item {
                     background: rgba(255, 255, 255, 100);  /* Semi-transparent item background */
                 }
-            """)            
-            layout.addWidget(self.table_widget_Dashboard)
+            """)
+            layout.addWidget(self.tree_widget_Dashboard)
 
-            # Save Files Section:
-                #Button
-            self.save_files_button_Dashboard = QPushButton("Save Files")
+
+            # Save Files Section
+            save_button_layout = QHBoxLayout()
+
+            # Add stretch to center buttons
+            save_button_layout.addStretch()
+
+            # Save Selected Button
+            self.save_selected_button_Dashboard = QPushButton("Save Selected")
+            self.save_selected_button_Dashboard.setStyleSheet("""
+                font-family: 'Arial';  /* Font name */
+                font-size: 18px;       /* Font size */
+                color: white;          /* Font color */                       
+            """)
+            self.save_selected_button_Dashboard.setFixedSize(250, 60)
+            self.save_selected_button_Dashboard.setDisabled(True)  # Initially disabled
+            self.save_selected_button_Dashboard.clicked.connect(self.saveSelected_buttonFunction_Dashboard)
+            save_button_layout.addWidget(self.save_selected_button_Dashboard)
+
+            # Space between buttons
+            save_button_layout.addSpacing(20)
+
+            # Save All Files Button
+            self.save_files_button_Dashboard = QPushButton("Save All Files")
             self.save_files_button_Dashboard.setStyleSheet("""
                 font-family: 'Arial';  /* Font name */
                 font-size: 18px;       /* Font size */
                 color: white;          /* Font color */                       
             """)
             self.save_files_button_Dashboard.setFixedSize(250, 60)
-            self.save_files_button_Dashboard.setDisabled(True)
-            self.save_files_button_Dashboard.clicked.connect(self.save_files_buttonFunction_Dashboard)
+            self.save_files_button_Dashboard.setDisabled(True)  # Initially disabled
+            self.save_files_button_Dashboard.clicked.connect(self.saveAllFiles_buttonFunction_Dashboard)
+            save_button_layout.addWidget(self.save_files_button_Dashboard)
 
-            # Create a horizontal layout to center the button
-            save_button_layout = QHBoxLayout()
-            save_button_layout.addStretch()  # Add stretch before the button
-            save_button_layout.addWidget(self.save_files_button_Dashboard)  # Add the button to the layout
-            save_button_layout.addStretch()  # Add stretch after the button
+            # Add stretch to center buttons
+            save_button_layout.addStretch()
+
+            # Add the layout to the main layout
             layout.addLayout(save_button_layout)
 
             #Version Section:
@@ -471,13 +531,12 @@ class MainWindow(QMainWindow):
                 print(csvFilePath)
                 # Packet parser thenn generates the files onto a hidden "temp" folder inside the application and then returns the names of all files
                 # These files names is then use to add the rows to the table widget.
-                self.save_files_button_Hermes.setDisabled(False)
         except Exception as e:
             logging.error("Raised error at generate_buttonFunction_Hermes. Error -> %s", e)                  
 
-    def save_files_buttonFunction_Hermes(self):
+    def saveAllFiles_buttonFunction_Hermes(self):
         '''
-        Hermes: Saves the .zip file of all the files generated from the CSV onto user local computer
+        Hermes: Saves all files in the Tree widget data
             @param:
                 self -> build in action\n
                 csvFilePath -> String
@@ -489,7 +548,23 @@ class MainWindow(QMainWindow):
             # This zip file path is used to as reference to save the zip file onto user local computer 
             pass
         except Exception as e:
-            logging.error("Raised error at save_files_buttonFunction_Hermes. Error -> %s", e)            
+            logging.error("Raised error at save_files_buttonFunction_Hermes. Error -> %s", e)  
+
+    def saveSelected_buttonFunction_Hermes(self):
+        '''
+        Hermes: Saves selected files indicated by the user in the Tree widget data
+            @param:
+                self -> build in action\n
+                csvFilePath -> String
+            @retun:
+                None
+        '''              
+        try:
+            # Inside the "temp folder created by the Packet Parser python file all the files are compressed as a zip file. 
+            # This zip file path is used to as reference to save the zip file onto user local computer 
+            pass
+        except Exception as e:
+            logging.error("Raised error at save_files_buttonFunction_Hermes. Error -> %s", e)                        
 
     def browse_buttonFunction_Dashboard(self):
         '''
@@ -509,9 +584,9 @@ class MainWindow(QMainWindow):
                 options=options  # pass options here
             )
             if file_name:
-                self.csv_lineEdit_Hermes.setText(file_name)
+                self.csv_lineEdit_Dashboard.setText(file_name)
         except Exception as e:
-            logging.error("Raised error at browse_buttonFunction_Hermes. Error -> %s", e)                
+            logging.error("Raised error at browse_buttonFunction_Dashboard. Error -> %s", e)                
 
     def generate_buttonFunction_Dashboard(self, csvFilePath):
         '''
@@ -532,22 +607,37 @@ class MainWindow(QMainWindow):
                 print(csvFilePath)
                 # Packet parser thenn generates the files onto a hidden "temp" folder inside the application and then returns the names of all files
                 # These files names is then use to add the rows to the table widget.
-                self.save_files_button_Dashboard.setDisabled(False)
         except Exception as e:
             logging.error("Raised error at generate_buttonFunction_Dashboard. Error -> %s", e)                  
 
-    def save_files_buttonFunction_Dashboard(self):
+    def saveAllFiles_buttonFunction_Dashboard(self):
         '''
-        Dashboard: Saves the .zip file of all the files generated from the CSV onto user local computer
+        Hermes: Saves all files in the Tree widget data
             @param:
                 self -> build in action\n
                 csvFilePath -> String
             @retun:
                 None
-        '''           
+        '''              
         try:
             # Inside the "temp folder created by the Packet Parser python file all the files are compressed as a zip file. 
             # This zip file path is used to as reference to save the zip file onto user local computer 
-            pass    
+            pass
         except Exception as e:
-            logging.error("Raised error at save_files_buttonFunction_Dashboard. Error -> %s", e)          
+            logging.error("Raised error at save_files_buttonFunction_Hermes. Error -> %s", e)  
+
+    def saveSelected_buttonFunction_Dashboard(self):
+        '''
+        Hermes: Saves selected files indicated by the user in the Tree widget data
+            @param:
+                self -> build in action\n
+                csvFilePath -> String
+            @retun:
+                None
+        '''              
+        try:
+            # Inside the "temp folder created by the Packet Parser python file all the files are compressed as a zip file. 
+            # This zip file path is used to as reference to save the zip file onto user local computer 
+            pass
+        except Exception as e:
+            logging.error("Raised error at save_files_buttonFunction_Hermes. Error -> %s", e)          
