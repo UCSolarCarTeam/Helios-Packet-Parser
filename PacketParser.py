@@ -115,7 +115,9 @@ class PacketParser():
             excelToJson_filePath = Excel_Json_Converter(self.excel_filePath, tempFolder_path).parse()
             if("Failed" in excelToJson_filePath):
                 print("Failed convert Excel into Json") # Inform user that it was unable to convert Excel into Json
-
+            # jsonToHeaders_filepath = Json_Packets_Converter(excelToJson_filePath, tempFolder_path)
+            # if("Failed" in jsonToHeaders_filepath):
+            #     print("Failed convert Json into CPP Header files") # Inform user that it was unable to convert Excel into Json            
             # packets_header_filePath = Json_Packets_Converter(excelToJson_filePath, tempFolder_path).parse_headers()
             # if("Failed" in packets_header_filePath):
             #     print("Failed to generate Packets header files") #  Inform user that it was unable to generate Packets header files       
@@ -127,5 +129,5 @@ class PacketParser():
         
 # Testing purposes
 if __name__ == "__main__":
-    excelFilePath = "C:\\Users\\david\\OneDrive\\Desktop\\Personal\\SolarCar\\Helios-Packet-Parser\\Spreadsheets\\ElysiaDateSheet_4.xlsx"
+    excelFilePath = "C:\\Users\\david\\OneDrive\\Desktop\\Personal\\SolarCar\\Helios-Packet-Parser\\Spreadsheet\\TestSheet.xlsx"
     PacketParser(excelFilePath).overall_parseExecution()
